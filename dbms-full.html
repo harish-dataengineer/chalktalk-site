@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS — Full Notes | ChalkTalk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@600;700&family=Lexend:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+  :root{
+    --paper: #FAF7EF; --paper-line: #C7D3E8; --ink: #1D3557; --ink-soft: #4A5A78;
+    --pencil: #7A7368; --red-pen: #B23A2F; --red-pen-soft: #E8B5AE;
+    --highlight: #F4D35E; --highlight-soft: #FBEAB0; --green: #2C7A4B; --green-soft: #D9EEE0;
+    --card-shadow: rgba(29,53,87,0.08);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--paper);
+    background-image:repeating-linear-gradient(to bottom, transparent 0px, transparent 37px, var(--paper-line) 38px);
+    background-attachment:local; color:var(--ink); font-family:'Lexend', sans-serif; line-height:1.65;
+  }
+  a{color:var(--red-pen);}
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px 80px;}
+
+  header.site{
+    padding:24px 0 16px; border-bottom:2px solid var(--ink);
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
+  }
+  .brand{font-family:'Patrick Hand', cursive; font-size:1.4rem; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:8px;}
+  .brand .dot{width:10px; height:10px; border-radius:50%; background:var(--red-pen); display:inline-block;}
+  .back{font-size:0.9rem; color:var(--ink-soft); text-decoration:none;}
+  .back:hover{color:var(--red-pen);}
+
+  .lesson-head{padding:34px 0 10px;}
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:0.75rem; letter-spacing:0.05em; text-transform:uppercase;
+    color:var(--red-pen); background:var(--highlight-soft); padding:4px 10px; border-radius:3px;
+    display:inline-block; transform:rotate(-1deg);
+  }
+  h1.title{font-family:'Caveat', cursive; font-weight:700; font-size:3rem; margin:14px 0 6px; line-height:1.1;}
+  .meta{color:var(--pencil); font-size:0.9rem; margin-bottom:20px;}
+
+  h2.unit-head{
+    font-family:'Lexend'; font-weight:700; font-size:1.6rem; margin:50px 0 6px;
+    padding-top:20px; border-top:2px dashed var(--paper-line);
+  }
+  h2.unit-head:first-of-type{border-top:none; padding-top:0;}
+  h3.topic{font-family:'Lexend'; font-weight:600; font-size:1.15rem; margin:26px 0 4px; color:var(--ink);}
+
+  .eli5{
+    background:var(--highlight-soft); border:2px solid var(--ink); border-radius:8px;
+    padding:18px 20px; margin:14px 0 18px; position:relative; box-shadow:4px 4px 0 var(--card-shadow);
+  }
+  .eli5::before{
+    content:"Explain like I'm 10"; position:absolute; top:-13px; left:16px; background:var(--red-pen); color:#fff;
+    font-family:'Patrick Hand', cursive; font-size:1rem; padding:2px 12px; border-radius:4px; transform:rotate(-2deg);
+  }
+  .eli5 p{margin:6px 0 0;}
+  .eli5 p:first-child{margin-top:0;}
+
+  .now-formal{margin:16px 0;}
+  .now-formal .label{font-family:'Patrick Hand', cursive; color:var(--ink-soft); font-size:1rem; margin-bottom:6px; display:block;}
+  .now-formal p{margin:0 0 10px;}
+
+  .numeric-box{
+    background:#fff; border:2px solid var(--ink); border-radius:8px; padding:18px 20px; margin:16px 0;
+  }
+  .numeric-box .label{
+    font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:var(--red-pen); text-transform:uppercase;
+    letter-spacing:0.05em; margin-bottom:10px; display:block;
+  }
+  .numeric-box table{width:100%; border-collapse:collapse; margin:8px 0; font-size:0.9rem;}
+  .numeric-box th, .numeric-box td{border:1px solid var(--paper-line); padding:6px 10px; text-align:left;}
+  .numeric-box th{background:var(--paper); font-weight:600;}
+  .step{margin:10px 0 0; padding-left:16px; border-left:3px solid var(--green); }
+  .step .step-label{font-weight:600; color:var(--green); font-size:0.85rem;}
+
+  .exam-tag{
+    display:inline-flex; align-items:center; gap:6px; background:var(--green-soft); color:var(--green);
+    font-family:'JetBrains Mono', monospace; font-size:0.72rem; padding:3px 10px; border-radius:20px;
+    margin-bottom:10px; font-weight:500;
+  }
+  .exam-tag::before{content:"★";}
+
+  ul.simple-list{padding-left:22px; margin:10px 0;}
+  ul.simple-list li{margin-bottom:6px;}
+
+  .qbox{border:2px solid var(--ink); border-radius:8px; padding:18px 20px; margin:16px 0; background:#fff;}
+  .qbox .qhead{font-weight:600; margin-bottom:8px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+  .qbox .qhead .marks{font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:var(--red-pen); white-space:nowrap;}
+
+  /* ---------- Paywall ---------- */
+  #locked-view{padding:60px 0;}
+  .paywall-card{
+    border:2px solid var(--ink); border-radius:12px; background:#fff; padding:36px 30px;
+    text-align:center; box-shadow:6px 6px 0 var(--card-shadow);
+  }
+  .paywall-card h2{font-family:'Caveat', cursive; font-size:2.4rem; margin:0 0 6px;}
+  .paywall-card p.desc{color:var(--ink-soft); max-width:460px; margin:0 auto 22px;}
+  .price-tag{
+    font-family:'Caveat', cursive; font-size:2.6rem; color:var(--red-pen); margin:10px 0 4px;
+  }
+  .price-note{color:var(--pencil); font-size:0.85rem; margin-bottom:24px;}
+  .includes{
+    text-align:left; max-width:380px; margin:0 auto 26px; list-style:none; padding:0;
+  }
+  .includes li{margin-bottom:8px; font-size:0.92rem; display:flex; gap:8px;}
+  .includes li::before{content:"✓"; color:var(--green); font-weight:700;}
+  .btn-pay{
+    display:inline-block; background:var(--red-pen); color:#fff; font-weight:600; font-size:1.05rem;
+    padding:14px 34px; border-radius:8px; text-decoration:none; border:2px solid var(--red-pen); cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn-pay:hover{transform:translateY(-2px); box-shadow:3px 4px 0 var(--ink);}
+  .paywall-foot{font-size:0.8rem; color:var(--pencil); margin-top:16px;}
+
+  #unlocked-view{display:none;}
+  .unlocked-banner{
+    background:var(--green-soft); border:2px solid var(--green); border-radius:8px;
+    padding:12px 18px; margin-bottom:30px; font-size:0.9rem; color:var(--green); font-weight:500;
+    display:flex; align-items:center; gap:8px;
+  }
+
+  footer{border-top:2px solid var(--ink); padding:24px 0 0; margin-top:40px; color:var(--pencil); font-size:0.85rem;}
+
+  @media (max-width:640px){
+    h1.title{font-size:2.2rem;}
+    .paywall-card{padding:28px 20px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="site">
+    <a class="brand" href="index.html"><span class="dot"></span>ChalkTalk</a>
+    <a class="back" href="lesson-dbms-unit1.html">← Back to Unit 1</a>
+  </header>
+
+  <div class="lesson-head">
+    <span class="eyebrow">DBMS · Units 2–5 · Full Notes</span>
+    <h1 class="title">The Rest of DBMS, Simplified</h1>
+    <p class="meta">Relational model, ER &amp; SQL, normalization, indexing — all four remaining units, same simple-first style.</p>
+  </div>
+
+  <!-- ======= LOCKED / PAYWALL VIEW ======= -->
+  <div id="locked-view">
+    <div class="paywall-card">
+      <h2>Unlock the Full DBMS Notes</h2>
+      <p class="desc">You've read Unit 1 free. These four units cover everything the rest of your DBMS exam is built on — including the normalization numericals nobody explains step-by-step.</p>
+      <div class="price-tag">₹99</div>
+      <div class="price-note">one-time payment · lifetime access to this subject</div>
+      <ul class="includes">
+        <li>Units 2, 3, 4 &amp; 5 — full simple-first explanations</li>
+        <li>Worked normalization numericals (1NF → BCNF, step by step)</li>
+        <li>SQL practice questions mapped to your syllabus</li>
+        <li>Exam-format model answers, not just theory</li>
+      </ul>
+      <button class="btn-pay" onclick="payNow()">Pay ₹99 &amp; Unlock</button>
+      <p class="paywall-foot">Secure payment via Razorpay (UPI, cards, netbanking)</p>
+    </div>
+  </div>
+
+  <!-- ======= UNLOCKED CONTENT VIEW ======= -->
+  <div id="unlocked-view">
+    <div class="unlocked-banner">✓ Unlocked — thanks for supporting ChalkTalk. This stays unlocked on this device.</div>
+
+    <h2 class="unit-head">Unit 2 — Relational Model &amp; Basic SQL</h2>
+
+    <h3 class="topic">Primary Key vs Foreign Key vs Candidate Key</h3>
+    <div class="eli5">
+      <p>Every student in your college has a unique roll number — that's a bit like a <strong>Primary Key</strong>. No two students share one, and it's how the office identifies you.</p>
+      <p>Now imagine the library keeps a record of "which roll number borrowed which book." That roll number sitting inside the library's table, pointing back to the student table, is a <strong>Foreign Key</strong> — it links one table to another.</p>
+      <p>A <strong>Candidate Key</strong> is any column that *could* have been chosen as the primary key (like your roll number OR your Aadhaar number — either uniquely identifies you, but only one gets picked as "the" key).</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p><strong>Primary Key:</strong> a column (or set of columns) that uniquely identifies each row in a table, and cannot be NULL.<br>
+      <strong>Candidate Key:</strong> any minimal set of columns that could uniquely identify a row — one of these is chosen as the primary key.<br>
+      <strong>Foreign Key:</strong> a column in one table that refers to the primary key of another table, used to link related data.</p>
+    </div>
+
+    <h3 class="topic">GROUP BY and HAVING</h3>
+    <div class="eli5">
+      <p>Imagine sorting your class into groups by branch — CSE students in one pile, ECE in another. That's <strong>GROUP BY</strong>. Now if you only want to see groups with more than 40 students, that filter-after-grouping is <strong>HAVING</strong>.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p><code>GROUP BY</code> groups rows sharing a value into summary rows, usually used with aggregate functions (COUNT, SUM, AVG). <code>HAVING</code> filters those grouped results — unlike <code>WHERE</code>, which filters rows before grouping.</p>
+    </div>
+    <div class="qbox">
+      <div class="qhead"><span>Write a query to find departments with more than 5 employees, using GROUP BY and HAVING.</span><span class="marks">5 marks</span></div>
+      <p style="color:var(--ink-soft); margin:0;">Tip: write the <code>SELECT ... FROM ... GROUP BY ... HAVING</code> skeleton first, then fill in the condition — examiners give partial marks for correct structure even if the condition is off.</p>
+    </div>
+
+    <h2 class="unit-head">Unit 3 — ER Model &amp; Advanced SQL</h2>
+
+    <h3 class="topic">Specialization &amp; Generalization in ER Diagrams</h3>
+    <div class="eli5">
+      <p>Think of "Vehicle" as a broad category. A Car and a Bike are both vehicles, but each has its own extra details — a car has "number of doors," a bike doesn't. Splitting "Vehicle" into more specific types like Car and Bike is called <strong>specialization</strong>.</p>
+      <p><strong>Generalization</strong> is the reverse — you notice Car and Bike share common features (both have a registration number, both have an owner), so you pull those shared features up into one general "Vehicle" entity.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p><strong>Specialization:</strong> top-down process of defining subclasses of an entity based on distinguishing characteristics. <strong>Generalization:</strong> bottom-up process of combining common attributes of multiple entities into a single superclass.</p>
+    </div>
+
+    <h3 class="topic">Joins — the visual way to remember them</h3>
+    <div class="eli5">
+      <p>Imagine two friend groups sitting in two different lines. An <strong>INNER JOIN</strong> only keeps people who have a friend in the other line. A <strong>LEFT JOIN</strong> keeps everyone from the first line — friend or not. A <strong>RIGHT JOIN</strong> does the same but keeps everyone from the second line. A <strong>FULL OUTER JOIN</strong> keeps everyone from both lines, matched or not.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p>Joins combine rows from two or more tables based on a related column. The type of join determines which unmatched rows (if any) are still included in the result.</p>
+    </div>
+    <div class="qbox">
+      <div class="qhead"><span>Explain the difference between INNER JOIN and LEFT JOIN with an example.</span><span class="marks">10 marks</span></div>
+      <p style="color:var(--ink-soft); margin:0;">Tip: always draw two small sample tables (3-4 rows each) and show the actual output table — visual answers score noticeably higher than pure definitions.</p>
+    </div>
+
+    <h2 class="unit-head">Unit 4 — Normalization &amp; Transactions</h2>
+
+    <h3 class="topic">Normalization — the numerical everyone loses marks on</h3>
+    <div class="eli5">
+      <p>Imagine one giant table trying to store a student's name, their branch, AND every single subject they're taking, all in one row that keeps repeating. If a subject's credit count changes, you'd have to update it in a hundred different rows. Normalization is just the process of splitting this messy giant table into smaller, cleaner ones so you only ever have to update information in <em>one</em> place.</p>
+    </div>
+    <div class="numeric-box">
+      <span class="label">Worked example — from unnormalized to 3NF</span>
+      <p><strong>Step 0 — Unnormalized Table (UNF):</strong> a single Student_Course table with repeating groups:</p>
+      <table>
+        <tr><th>StudentID</th><th>StudentName</th><th>Courses</th></tr>
+        <tr><td>101</td><td>Ravi</td><td>DBMS, DSA</td></tr>
+      </table>
+      <div class="step"><span class="step-label">Step 1 — Convert to 1NF:</span> remove repeating groups, one course per row.
+        <table>
+          <tr><th>StudentID</th><th>StudentName</th><th>Course</th></tr>
+          <tr><td>101</td><td>Ravi</td><td>DBMS</td></tr>
+          <tr><td>101</td><td>Ravi</td><td>DSA</td></tr>
+        </table>
+      </div>
+      <div class="step"><span class="step-label">Step 2 — Convert to 2NF:</span> remove partial dependency. StudentName depends only on StudentID, not on the (StudentID, Course) pair — so split it out.
+        <table>
+          <tr><th>StudentID</th><th>StudentName</th></tr>
+          <tr><td>101</td><td>Ravi</td></tr>
+        </table>
+        <table>
+          <tr><th>StudentID</th><th>Course</th></tr>
+          <tr><td>101</td><td>DBMS</td></tr>
+          <tr><td>101</td><td>DSA</td></tr>
+        </table>
+      </div>
+      <div class="step"><span class="step-label">Step 3 — Convert to 3NF:</span> remove transitive dependency. If CourseName depended on a CourseID rather than directly on StudentID, that also gets its own table. Result: no non-key column depends on another non-key column.</div>
+    </div>
+    <div class="qbox">
+      <div class="qhead"><span>Normalize the given unnormalized table up to 3NF, showing each step.</span><span class="marks">10 marks</span></div>
+      <p style="color:var(--ink-soft); margin:0;">Tip: label each step (1NF, 2NF, 3NF) clearly and explain WHY you're splitting the table at each stage — examiners award marks per correctly justified step, not just the final tables.</p>
+    </div>
+
+    <h3 class="topic">ACID Properties of a Transaction</h3>
+    <div class="eli5">
+      <p>Imagine transferring money to a friend via UPI. Either the full transfer happens, or none of it does — you'd never want money to leave your account without reaching your friend's. That "all or nothing" promise is what ACID properties guarantee for every database transaction.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <ul class="simple-list">
+        <li><strong>Atomicity:</strong> a transaction is all-or-nothing — either fully completes or fully rolls back.</li>
+        <li><strong>Consistency:</strong> a transaction takes the database from one valid state to another, never breaking rules.</li>
+        <li><strong>Isolation:</strong> concurrent transactions don't interfere with each other's intermediate results.</li>
+        <li><strong>Durability:</strong> once committed, changes survive even a system crash.</li>
+      </ul>
+    </div>
+
+    <h2 class="unit-head">Unit 5 — Indexing &amp; Database Tuning</h2>
+
+    <h3 class="topic">Why indexes exist (and B+ Trees)</h3>
+    <div class="eli5">
+      <p>Imagine looking for one word in a 500-page textbook with no index at the back — you'd have to flip through every single page. Now imagine the book has an index page listing words alphabetically with page numbers. That's exactly what a database <strong>index</strong> does — it lets the system jump straight to the right row instead of scanning the whole table.</p>
+      <p>A <strong>B+ Tree</strong> is just a smart, organized version of that index — like a index that's itself split into smaller sub-indexes so even a huge book stays fast to search.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p>A B+ Tree is a balanced tree data structure used for indexing, where all actual data pointers are stored only at the leaf nodes, and internal nodes only guide the search — keeping search, insert, and delete operations efficient at O(log n).</p>
+    </div>
+
+    <h3 class="topic">Primary vs Secondary Indexing</h3>
+    <div class="eli5">
+      <p>A <strong>primary index</strong> is like a phone book sorted by name — the data itself is physically stored in that sorted order. A <strong>secondary index</strong> is like a separate list sorted by phone number instead — the actual data isn't rearranged, just a pointer list is added.</p>
+    </div>
+    <div class="qbox">
+      <div class="qhead"><span>Differentiate between primary and secondary indexing with examples.</span><span class="marks">5 marks</span></div>
+      <p style="color:var(--ink-soft); margin:0;">Tip: mention that a table can have only ONE primary index (since data can only be physically sorted one way) but MULTIPLE secondary indexes.</p>
+    </div>
+
+    <div style="margin-top:50px; padding:20px; border:2px dashed var(--paper-line); border-radius:8px; text-align:center; color:var(--pencil); font-size:0.9rem;">
+      That's all 5 units of DBMS. Next up on ChalkTalk: Advanced Data Structures &amp; Algorithms.
+    </div>
+  </div>
+
+  <footer>
+    <span>ChalkTalk · DBMS full notes</span>
+  </footer>
+</div>
+
+<script>
+  // ---------------------------------------------------------------
+  // UNLOCK LOGIC
+  // MVP approach: client-side unlock stored in localStorage after a
+  // successful Razorpay payment. This is fine to launch and test with,
+  // but note the honest limitation below before scaling up.
+  //
+  // LIMITATION: because there's no backend verifying the payment,
+  // a technically savvy user could open dev tools and manually set
+  // localStorage to fake an unlock. For a ₹99 college-notes product
+  // this risk is low and acceptable at MVP stage. Once you have real
+  // paying users, add a small serverless function (e.g. on Vercel or
+  // a free-tier backend) that verifies the Razorpay payment signature
+  // server-side before marking a purchase as valid — that closes this gap.
+  // ---------------------------------------------------------------
+
+  const UNLOCK_KEY = 'chalktalk_dbms_unlocked';
+
+  function showUnlockedView(){
+    document.getElementById('locked-view').style.display = 'none';
+    document.getElementById('unlocked-view').style.display = 'block';
+  }
+
+  function checkUnlockStatus(){
+    if(localStorage.getItem(UNLOCK_KEY) === 'true'){
+      showUnlockedView();
+    }
+  }
+
+  function payNow(){
+    // ---- REPLACE with your real Razorpay Key ID from your dashboard ----
+    // Sign up at https://dashboard.razorpay.com/ (free), complete KYC to
+    // accept real payments, then copy your Key ID from Settings > API Keys.
+    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_ID_HERE";
+
+    const options = {
+      key: RAZORPAY_KEY_ID,
+      amount: 9900, // amount in paise = ₹99.00
+      currency: "INR",
+      name: "ChalkTalk",
+      description: "DBMS Full Notes — Units 2 to 5",
+      handler: function(response){
+        // Payment succeeded — response.razorpay_payment_id is the proof.
+        // For MVP: unlock immediately on this device.
+        localStorage.setItem(UNLOCK_KEY, 'true');
+        showUnlockedView();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      },
+      theme: { color: "#B23A2F" },
+      modal: {
+        ondismiss: function(){
+          console.log("Checkout closed without completing payment.");
+        }
+      }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+  }
+
+  // On page load, check if this device already unlocked it
+  checkUnlockStatus();
+</script>
+<script src="chat-widget.js"></script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChalkTalk — Engineering, Explained Simply</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@600;700&family=Lexend:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #FAF7EF;
+    --paper-line: #C7D3E8;
+    --ink: #1D3557;
+    --ink-soft: #4A5A78;
+    --pencil: #7A7368;
+    --red-pen: #B23A2F;
+    --red-pen-soft: #E8B5AE;
+    --highlight: #F4D35E;
+    --highlight-soft: #FBEAB0;
+    --card-shadow: rgba(29,53,87,0.08);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 37px,
+        var(--paper-line) 38px
+      );
+    background-attachment:local;
+    color:var(--ink);
+    font-family:'Lexend', sans-serif;
+    line-height:1.6;
+  }
+
+  a{color:var(--red-pen); text-decoration-thickness:2px; text-underline-offset:3px;}
+
+  .wrap{max-width:1040px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- Header ---------- */
+  header.site{
+    padding:28px 0 18px;
+    border-bottom:2px solid var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .brand{
+    font-family:'Patrick Hand', cursive;
+    font-size:1.6rem;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .brand .dot{
+    width:12px; height:12px; border-radius:50%;
+    background:var(--red-pen);
+    display:inline-block;
+  }
+  nav.site a{
+    color:var(--ink-soft);
+    font-weight:500;
+    font-size:0.95rem;
+    margin-left:22px;
+    text-decoration:none;
+    border-bottom:2px solid transparent;
+    padding-bottom:2px;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  nav.site a:hover{border-color:var(--red-pen); color:var(--red-pen);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:64px 0 48px;
+    position:relative;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:36px;
+    align-items:center;
+  }
+  .hero-visual{
+    display:flex;
+    justify-content:center;
+  }
+  .hero-visual svg{width:100%; max-width:380px; height:auto;}
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-visual{order:-1; margin-bottom:10px;}
+    .hero-visual svg{max-width:280px;}
+  }
+  .hero .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--red-pen);
+    background:var(--highlight-soft);
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:3px;
+    transform:rotate(-1deg);
+  }
+  .hero h1{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:4rem;
+    line-height:1.05;
+    margin:18px 0 6px;
+    color:var(--ink);
+  }
+  .hero h1 span{
+    color:var(--red-pen);
+    position:relative;
+    white-space:nowrap;
+  }
+  .hero h1 span svg{
+    position:absolute;
+    left:-2%;
+    bottom:-6px;
+    width:104%;
+    height:14px;
+  }
+  .hero p.sub{
+    font-size:1.15rem;
+    color:var(--ink-soft);
+    max-width:560px;
+    margin:14px 0 30px;
+  }
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    display:inline-block;
+    font-family:'Lexend';
+    font-weight:600;
+    font-size:0.98rem;
+    padding:13px 24px;
+    border-radius:6px;
+    text-decoration:none;
+    border:2px solid var(--ink);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px); box-shadow:3px 4px 0 var(--ink);}
+  .btn-primary{background:var(--red-pen); color:#fff; border-color:var(--red-pen);}
+  .btn-primary:hover{box-shadow:3px 4px 0 var(--ink-soft);}
+  .btn-ghost{background:transparent; color:var(--ink);}
+
+  .hero-tag{
+    margin-top:34px;
+    font-family:'Patrick Hand', cursive;
+    font-size:1.2rem;
+    color:var(--pencil);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .hero-tag::before{content:"→"; font-size:1.4rem; color:var(--red-pen);}
+
+  /* ---------- Subject grid ---------- */
+  .section{padding:40px 0;}
+  .section h2{
+    font-family:'Patrick Hand', cursive;
+    font-size:2rem;
+    margin-bottom:6px;
+  }
+  .section .lede{color:var(--ink-soft); margin-bottom:28px; max-width:600px;}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+    gap:18px;
+  }
+  .card{
+    background:#fff;
+    border:2px solid var(--ink);
+    border-radius:8px;
+    padding:20px 20px 18px;
+    box-shadow:5px 5px 0 var(--card-shadow);
+    transition:transform .15s ease, box-shadow .15s ease;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .card:hover{transform:translate(-2px,-2px); box-shadow:7px 7px 0 var(--card-shadow);}
+  .card .icon{margin-bottom:2px;}
+  .card .tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.7rem;
+    color:var(--red-pen);
+    letter-spacing:0.04em;
+  }
+  .card h3{
+    font-family:'Lexend'; font-size:1.15rem; margin:0; color:var(--ink);
+  }
+  .card p{margin:0; font-size:0.92rem; color:var(--ink-soft);}
+  .card .status{
+    margin-top:6px;
+    font-family:'Patrick Hand', cursive;
+    font-size:1rem;
+  }
+  .status.live{color:#2C7A4B;}
+  .status.soon{color:var(--pencil);}
+  .card a.go{
+    margin-top:8px;
+    font-weight:600;
+    font-size:0.9rem;
+    text-decoration:none;
+  }
+
+  /* ---------- Why section ---------- */
+  .why-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:22px;
+  }
+  .why-item{padding:6px 0;}
+  .why-item .num{
+    font-family:'Caveat', cursive;
+    font-size:2.2rem;
+    color:var(--red-pen);
+    line-height:1;
+  }
+  .why-item h4{margin:6px 0 4px; font-size:1.05rem;}
+  .why-item p{margin:0; color:var(--ink-soft); font-size:0.92rem;}
+
+  footer{
+    border-top:2px solid var(--ink);
+    padding:26px 0 40px;
+    color:var(--pencil);
+    font-size:0.85rem;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+  @media (max-width:640px){
+    .hero h1{font-size:2.6rem;}
+    header.site{padding:22px 0 16px;}
+    nav.site a{margin-left:14px; font-size:0.85rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="site">
+    <div class="brand"><span class="dot"></span>ChalkTalk</div>
+    <nav class="site">
+      <a href="#subjects">Subjects</a>
+      <a href="lesson-dbms-unit1.html">Try a Free Lesson</a>
+      <a href="#why">Why Us</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Engineering Subjects · Simplified</span>
+        <h1>DBMS, DSA, Java —<br>explained so simply, it just<br><span>clicks<svg viewBox="0 0 200 14" preserveAspectRatio="none"><path d="M2 10 Q 50 2, 100 8 T 198 6" stroke="#F4D35E" stroke-width="10" fill="none" stroke-linecap="round"/></svg></span> in your head.</h1>
+        <p class="sub">Real syllabus, real exam questions — explained in plain words first, textbook words second.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="lesson-dbms-unit1.html">Read a Free Lesson</a>
+          <a class="btn btn-ghost" href="#subjects">See All Subjects</a>
+        </div>
+        <div class="hero-tag">No jargon before the simple version. Ever.</div>
+      </div>
+      <div class="hero-visual">
+        <svg viewBox="0 0 340 300" xmlns="http://www.w3.org/2000/svg">
+          <!-- Messy book left -->
+          <g transform="translate(10,40) rotate(-8)">
+            <rect x="0" y="0" width="110" height="150" rx="4" fill="#fff" stroke="#1D3557" stroke-width="2.5"/>
+            <line x1="14" y1="24" x2="96" y2="24" stroke="#B23A2F" stroke-width="2"/>
+            <line x1="14" y1="40" x2="80" y2="40" stroke="#B23A2F" stroke-width="2"/>
+            <line x1="14" y1="56" x2="90" y2="56" stroke="#4A5A78" stroke-width="2"/>
+            <line x1="14" y1="72" x2="70" y2="72" stroke="#B23A2F" stroke-width="2"/>
+            <line x1="14" y1="88" x2="96" y2="88" stroke="#4A5A78" stroke-width="2"/>
+            <line x1="14" y1="104" x2="60" y2="104" stroke="#B23A2F" stroke-width="2"/>
+            <line x1="14" y1="120" x2="85" y2="120" stroke="#4A5A78" stroke-width="2"/>
+            <text x="55" y="140" text-anchor="middle" font-family="Caveat" font-size="26" fill="#B23A2F" font-weight="700">?!?</text>
+          </g>
+          <!-- Arrow -->
+          <g transform="translate(140,120)">
+            <path d="M0 10 H55" stroke="#1D3557" stroke-width="3" fill="none"/>
+            <path d="M48 0 L62 10 L48 20" stroke="#1D3557" stroke-width="3" fill="none" stroke-linejoin="round"/>
+          </g>
+          <!-- Simple notebook right -->
+          <g transform="translate(210,30) rotate(6)">
+            <rect x="0" y="0" width="120" height="160" rx="6" fill="#FBEAB0" stroke="#1D3557" stroke-width="2.5"/>
+            <circle cx="60" cy="55" r="26" fill="#D9EEE0" stroke="#1D3557" stroke-width="2"/>
+            <path d="M48 55 L57 65 L74 44" stroke="#2C7A4B" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="24" y1="102" x2="96" y2="102" stroke="#1D3557" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="24" y1="118" x2="80" y2="118" stroke="#4A5A78" stroke-width="2" stroke-linecap="round"/>
+            <line x1="24" y1="134" x2="90" y2="134" stroke="#4A5A78" stroke-width="2" stroke-linecap="round"/>
+          </g>
+          <!-- sparkle -->
+          <g transform="translate(275,20)">
+            <path d="M0 -10 L3 -2 L11 0 L3 2 L0 10 L-3 2 L-11 0 L-3 -2 Z" fill="#F4D35E" stroke="#1D3557" stroke-width="1.5"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="subjects">
+    <h2>Your Subjects, Sorted</h2>
+    <p class="lede">Five subjects. Unit-wise. Explained simple first, exam-ready second.</p>
+    <div class="grid">
+      <div class="card">
+        <svg class="icon" viewBox="0 0 40 40" width="34" height="34"><ellipse cx="20" cy="10" rx="14" ry="5" fill="#D9EEE0" stroke="#1D3557" stroke-width="2"/><path d="M6 10 V26 C6 29 12.5 31 20 31 C27.5 31 34 29 34 26 V10" fill="#D9EEE0" stroke="#1D3557" stroke-width="2"/><path d="M6 18 C6 21 12.5 23 20 23 C27.5 23 34 21 34 18" fill="none" stroke="#1D3557" stroke-width="2"/></svg>
+        <span class="tag">Core Subject</span>
+        <h3>Database Management Systems</h3>
+        <p>SQL, ER diagrams, normalization — with worked numericals, not just theory.</p>
+        <span class="status live">● 1 free lesson live</span>
+        <a class="go" href="lesson-dbms-unit1.html">Start Unit 1 →</a>
+      </div>
+      <div class="card">
+        <svg class="icon" viewBox="0 0 40 40" width="34" height="34"><circle cx="20" cy="8" r="5" fill="#FBEAB0" stroke="#1D3557" stroke-width="2"/><circle cx="10" cy="24" r="5" fill="#FBEAB0" stroke="#1D3557" stroke-width="2"/><circle cx="30" cy="24" r="5" fill="#FBEAB0" stroke="#1D3557" stroke-width="2"/><circle cx="20" cy="34" r="4" fill="#FBEAB0" stroke="#1D3557" stroke-width="2"/><path d="M20 13 L10 19 M20 13 L30 19 M10 29 L18 33 M30 29 L22 33" stroke="#1D3557" stroke-width="2"/></svg>
+        <span class="tag">Core Subject</span>
+        <h3>Advanced Data Structures &amp; Algorithms</h3>
+        <p>AVL trees, DP, backtracking — explained with pictures before code.</p>
+        <span class="status soon">◐ Coming next</span>
+      </div>
+      <div class="card">
+        <svg class="icon" viewBox="0 0 40 40" width="34" height="34"><rect x="10" y="14" width="20" height="18" rx="3" fill="#E8B5AE" stroke="#1D3557" stroke-width="2"/><path d="M14 14 V10 a6 6 0 0 1 12 0 v4" fill="none" stroke="#1D3557" stroke-width="2"/><circle cx="20" cy="23" r="2.4" fill="#1D3557"/></svg>
+        <span class="tag">Core Subject</span>
+        <h3>Java / OOP through C++</h3>
+        <p>Whichever track you're in — classes, inheritance, exceptions, made obvious.</p>
+        <span class="status soon">◐ Coming next</span>
+      </div>
+      <div class="card">
+        <svg class="icon" viewBox="0 0 40 40" width="34" height="34"><path d="M20 6 a14 14 0 1 1 -9.9 4.1" fill="none" stroke="#1D3557" stroke-width="2.5"/><path d="M10 6 v6 h6" fill="none" stroke="#1D3557" stroke-width="2.5" stroke-linejoin="round"/></svg>
+        <span class="tag">Core Subject</span>
+        <h3>Agile Software Engineering</h3>
+        <p>Scrum, TDD, SOLID principles — in plain English, not consultant-speak.</p>
+        <span class="status soon">◐ Coming next</span>
+      </div>
+      <div class="card">
+        <svg class="icon" viewBox="0 0 40 40" width="34" height="34"><circle cx="12" cy="12" r="5" fill="#D9EEE0" stroke="#1D3557" stroke-width="2"/><circle cx="28" cy="12" r="5" fill="#D9EEE0" stroke="#1D3557" stroke-width="2"/><circle cx="20" cy="28" r="5" fill="#D9EEE0" stroke="#1D3557" stroke-width="2"/><path d="M15 15 L25 15 M14 16 L18 25 M26 16 L22 25" stroke="#1D3557" stroke-width="2"/></svg>
+        <span class="tag">Core Subject</span>
+        <h3>Discrete Mathematics</h3>
+        <p>Logic, relations, graph theory — with the "why" behind every proof.</p>
+        <span class="status soon">◐ Coming next</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="why">
+    <h2>Why This, Not Another PDF</h2>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="num">1</div>
+        <h4>Built for your own syllabus</h4>
+        <p>Not generic. Every question maps to your actual current curriculum, unit by unit.</p>
+      </div>
+      <div class="why-item">
+        <div class="num">2</div>
+        <h4>Simple version first</h4>
+        <p>Every topic starts in plain words. The textbook definition comes after, once it clicks.</p>
+      </div>
+      <div class="why-item">
+        <div class="num">3</div>
+        <h4>Written like exam answers</h4>
+        <p>Answers structured the way evaluators actually give marks — not just "the right idea."</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Made by a student, for students.</span>
+    <span>DBMS · Unit 1 free forever</span>
+  </footer>
+</div>
+
+<script src="chat-widget.js"></script>
+</body>
+</html>
