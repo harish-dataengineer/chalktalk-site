@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About | ChalkTalk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@600;700&family=Lexend:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #FAF7EF; --paper-line: #C7D3E8; --ink: #1D3557; --ink-soft: #4A5A78;
+    --pencil: #7A7368; --red-pen: #B23A2F; --red-pen-soft: #E8B5AE;
+    --highlight: #F4D35E; --highlight-soft: #FBEAB0; --green: #2C7A4B; --green-soft: #D9EEE0;
+    --card-shadow: rgba(29,53,87,0.08);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--paper);
+    background-image:repeating-linear-gradient(to bottom, transparent 0px, transparent 37px, var(--paper-line) 38px);
+    background-attachment:local; color:var(--ink); font-family:'Lexend', sans-serif; line-height:1.65;
+  }
+  a{color:var(--red-pen);}
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px 80px;}
+
+  header.site{
+    padding:24px 0 16px; border-bottom:2px solid var(--ink);
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; margin-bottom:10px;
+  }
+  .brand{font-family:'Patrick Hand', cursive; font-size:1.4rem; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:8px;}
+  .brand .dot{width:10px; height:10px; border-radius:50%; background:var(--red-pen); display:inline-block;}
+  nav.site a{color:var(--ink-soft); font-weight:500; font-size:0.92rem; margin-left:18px; text-decoration:none; border-bottom:2px solid transparent; padding-bottom:2px;}
+  nav.site a:hover{border-color:var(--red-pen); color:var(--red-pen);}
+
+  .page-head{padding:34px 0 10px;}
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:0.75rem; letter-spacing:0.05em; text-transform:uppercase;
+    color:var(--red-pen); background:var(--highlight-soft); padding:4px 10px; border-radius:3px;
+    display:inline-block; transform:rotate(-1deg);
+  }
+  h1.title{font-family:'Caveat', cursive; font-weight:700; font-size:3rem; margin:14px 0 30px; line-height:1.1;}
+
+  .profile-card{
+    background:#fff; border:2px solid var(--ink); border-radius:12px; padding:32px;
+    box-shadow:6px 6px 0 var(--card-shadow); display:flex; gap:28px; align-items:flex-start; margin-bottom:36px;
+  }
+  .profile-photo{
+    width:130px; height:130px; border-radius:10px; object-fit:cover; flex-shrink:0;
+    border:3px solid var(--ink); transform:rotate(-2deg);
+  }
+  .profile-text h2{font-family:'Lexend'; font-size:1.4rem; margin:0 0 4px;}
+  .profile-text .role{font-family:'Patrick Hand', cursive; font-size:1.05rem; color:var(--red-pen); margin-bottom:12px; display:block;}
+  .profile-text p{margin:0 0 10px; color:var(--ink-soft);}
+  .profile-text .contact{font-family:'JetBrains Mono', monospace; font-size:0.85rem; color:var(--pencil);}
+
+  .why-block{margin:30px 0;}
+  .why-block h3{font-family:'Patrick Hand', cursive; font-size:1.5rem; margin:0 0 10px;}
+  .why-block p{color:var(--ink-soft); margin:0 0 12px;}
+
+  .stat-row{display:flex; gap:18px; flex-wrap:wrap; margin:26px 0;}
+  .stat{
+    background:#fff; border:2px solid var(--paper-line); border-radius:8px; padding:14px 18px; flex:1; min-width:140px;
+  }
+  .stat .num{font-family:'Caveat', cursive; font-size:2rem; color:var(--red-pen); line-height:1;}
+  .stat .label{font-size:0.82rem; color:var(--pencil); margin-top:4px;}
+
+  footer{border-top:2px solid var(--ink); padding:24px 0 0; margin-top:40px; color:var(--pencil); font-size:0.85rem;}
+
+  @media (max-width:600px){
+    .profile-card{flex-direction:column; align-items:center; text-align:center;}
+    .profile-photo{width:110px; height:110px;}
+    h1.title{font-size:2.3rem;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="site">
+    <a class="brand" href="index.html"><span class="dot"></span>ChalkTalk</a>
+    <nav class="site">
+      <a href="index.html">Subjects</a>
+      <a href="lesson-dbms-unit1.html">Free Lesson</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <div class="page-head">
+    <span class="eyebrow">About ChalkTalk</span>
+    <h1 class="title">Who's Behind This</h1>
+  </div>
+
+  <div class="profile-card">
+    <img class="profile-photo" src="assets/founder.jpg" alt="Harish Kumar Mula">
+    <div class="profile-text">
+      <h2>Harish Kumar Mula</h2>
+      <span class="role">Data Engineer · Founder, ChalkTalk</span>
+      <p>I've spent the last 9+ years working as a Data Engineer, building the kind of systems these subjects are actually used for in the real world. Somewhere along the way I realized what I enjoy most isn't just building — it's teaching people the concepts that once confused me too.</p>
+      <p>I started ChalkTalk because I kept seeing bright engineering students struggle with subjects that aren't actually hard — they're just explained badly. I wanted to fix that, one unit at a time.</p>
+      <span class="contact">harishmula@yahoo.com</span>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><div class="num">9+ yrs</div><div class="label">Industry experience as a Data Engineer</div></div>
+    <div class="stat"><div class="num">1:1</div><div class="label">Simple explanation → exam-ready answer</div></div>
+    <div class="stat"><div class="num">100%</div><div class="label">Written and reviewed personally</div></div>
+  </div>
+
+  <div class="why-block">
+    <h3>Why "explain it simply" matters to me</h3>
+    <p>In the real industry, the engineers who explain complex systems in plain language are the ones people trust and want to work with. That's the same instinct behind every lesson here — the plain-English version always comes first, the textbook definition comes right after, so it actually sticks instead of just being memorized for one exam.</p>
+    <p>If ChalkTalk helps even one student stop dreading a subject they used to fear, that's the whole point of building this.</p>
+  </div>
+
+  <footer>
+    <span>ChalkTalk · Built by a working Data Engineer, for the next generation of engineers.</span>
+  </footer>
+</div>
+
+<script src="chat-widget.js"></script>
+</body>
+</html>
