@@ -769,7 +769,7 @@
     async function payNow() {
       // Public key — safe to be visible in frontend code. The secret key
       // that actually verifies payments lives only on the backend.
-      const RAZORPAY_KEY_ID = "rzp_live_TXWENAbhbbdIQj";
+      // const RAZORPAY_KEY_ID = "rzp_live_TXWENAbhbbdIQj";
 
       const phone = getPhone();
       if (phone.length < 10) {
@@ -794,7 +794,7 @@
       }
 
       const options = {
-        key: RAZORPAY_KEY_ID,
+        key: order.keyId,
         amount: order.amount,
         currency: order.currency,
         order_id: order.orderId,
