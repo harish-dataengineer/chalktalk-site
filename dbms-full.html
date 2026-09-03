@@ -116,6 +116,16 @@
   }
   .btn-pay:hover{transform:translateY(-2px); box-shadow:3px 4px 0 var(--ink);}
   .paywall-foot{font-size:0.8rem; color:var(--pencil); margin-top:16px;}
+  .phone-input{
+    width:100%; max-width:340px; border:2px solid var(--paper-line); border-radius:8px;
+    padding:11px 14px; font-family:'Lexend'; font-size:0.95rem; margin-bottom:16px; outline:none;
+  }
+  .phone-input:focus{border-color:var(--red-pen);}
+  .recover-link{font-size:0.85rem; color:var(--pencil); margin-top:14px;}
+  .recover-link a{color:var(--ink-soft); text-decoration:underline;}
+  #ct-status-msg{font-size:0.85rem; margin-top:10px; min-height:18px;}
+  #ct-status-msg.error{color:var(--red-pen);}
+  #ct-status-msg.success{color:var(--green);}
 
   #unlocked-view{display:none;}
   .unlocked-banner{
@@ -162,8 +172,11 @@
         <li>SQL practice questions mapped to your syllabus</li>
         <li>Exam-format model answers, not just theory</li>
       </ul>
+      <input id="ct-phone" type="tel" placeholder="Your phone number (for your receipt & access)" class="phone-input" inputmode="numeric">
       <button class="btn-pay" onclick="payNow()">Pay ₹99 &amp; Unlock</button>
       <p class="paywall-foot">Secure payment via Razorpay (UPI, cards, netbanking)</p>
+      <p class="recover-link">Already paid on another device? <a href="#" onclick="recoverAccess(); return false;">Recover my access</a></p>
+      <div id="ct-status-msg"></div>
     </div>
   </div>
 
@@ -309,25 +322,28 @@
 
 <script>
   // ---------------------------------------------------------------
-  // UNLOCK LOGIC
-  // MVP approach: client-side unlock stored in localStorage after a
-  // successful Razorpay payment. This is fine to launch and test with,
-  // but note the honest limitation below before scaling up.
-  //
-  // LIMITATION: because there's no backend verifying the payment,
-  // a technically savvy user could open dev tools and manually set
-  // localStorage to fake an unlock. For a ₹99 college-notes product
-  // this risk is low and acceptable at MVP stage. Once you have real
-  // paying users, add a small serverless function (e.g. on Vercel or
-  // a free-tier backend) that verifies the Razorpay payment signature
-  // server-side before marking a purchase as valid — that closes this gap.
+  // UNLOCK LOGIC — v2, backend-verified
+  // Flow: student enters phone → payNow() asks OUR backend to create a
+  // Razorpay order → Razorpay checkout opens → on success, we send the
+  // payment details to OUR backend → backend verifies the signature is
+  // genuinely from Razorpay → backend records the purchase → THEN we
+  // unlock. A localStorage flag is kept too, just to skip the network
+  // check on repeat visits from the same device — but the source of
+  // truth is the backend record, not the browser.
   // ---------------------------------------------------------------
 
   const UNLOCK_KEY = 'chalktalk_dbms_unlocked';
+  const SUBJECT = 'dbms';
 
   function showUnlockedView(){
     document.getElementById('locked-view').style.display = 'none';
     document.getElementById('unlocked-view').style.display = 'block';
+  }
+
+  function setStatus(msg, type){
+    const el = document.getElementById('ct-status-msg');
+    el.textContent = msg;
+    el.className = type || '';
   }
 
   function checkUnlockStatus(){
@@ -336,35 +352,109 @@
     }
   }
 
-  function payNow(){
-    // ---- REPLACE with your real Razorpay Key ID from your dashboard ----
-    // Sign up at https://dashboard.razorpay.com/ (free), complete KYC to
-    // accept real payments, then copy your Key ID from Settings > API Keys.
-    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_ID_HERE";
+  function getPhone(){
+    const phone = document.getElementById('ct-phone').value.trim();
+    return phone.replace(/\D/g, '');
+  }
+
+  async function payNow(){
+    // Public key — safe to be visible in frontend code. The secret key
+    // that actually verifies payments lives only on the backend.
+    const RAZORPAY_KEY_ID = "rzp_live_TXWENAbhbbdIQj";
+
+    const phone = getPhone();
+    if(phone.length < 10){
+      setStatus('Please enter a valid phone number first.', 'error');
+      return;
+    }
+    setStatus('Setting up secure payment...', '');
+
+    let order;
+    try{
+      const orderRes = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ amount: 9900, subject: SUBJECT })
+      });
+      order = await orderRes.json();
+      if(!order.orderId) throw new Error('No order returned');
+    } catch(err){
+      console.error('Order creation failed:', err);
+      setStatus('Could not start payment. Please try again.', 'error');
+      return;
+    }
 
     const options = {
       key: RAZORPAY_KEY_ID,
-      amount: 9900, // amount in paise = ₹99.00
-      currency: "INR",
+      amount: order.amount,
+      currency: order.currency,
+      order_id: order.orderId,
       name: "ChalkTalk",
       description: "DBMS Full Notes — Units 2 to 5",
-      handler: function(response){
-        // Payment succeeded — response.razorpay_payment_id is the proof.
-        // For MVP: unlock immediately on this device.
-        localStorage.setItem(UNLOCK_KEY, 'true');
-        showUnlockedView();
-        window.scrollTo({top: 0, behavior: 'smooth'});
+      handler: async function(response){
+        setStatus('Verifying your payment...', '');
+        try{
+          const verifyRes = await fetch('/api/verify-payment', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              phone: phone,
+              subject: SUBJECT
+            })
+          });
+          const result = await verifyRes.json();
+          if(result.verified && result.unlocked){
+            localStorage.setItem(UNLOCK_KEY, 'true');
+            showUnlockedView();
+            window.scrollTo({top: 0, behavior: 'smooth'});
+          } else {
+            setStatus('Payment could not be verified. Contact support if money was deducted.', 'error');
+          }
+        } catch(err){
+          console.error('Verification failed:', err);
+          setStatus('Payment succeeded but verification failed — contact support with your payment ID: ' + response.razorpay_payment_id, 'error');
+        }
       },
       theme: { color: "#B23A2F" },
       modal: {
         ondismiss: function(){
-          console.log("Checkout closed without completing payment.");
+          setStatus('', '');
         }
       }
     };
 
     const rzp = new Razorpay(options);
     rzp.open();
+  }
+
+  async function recoverAccess(){
+    const phone = getPhone();
+    if(phone.length < 10){
+      setStatus('Enter the phone number you used when you paid.', 'error');
+      return;
+    }
+    setStatus('Checking...', '');
+    try{
+      const res = await fetch('/api/check-purchase', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ phone, subject: SUBJECT })
+      });
+      const data = await res.json();
+      if(data.unlocked){
+        localStorage.setItem(UNLOCK_KEY, 'true');
+        showUnlockedView();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      } else {
+        setStatus('No purchase found for this number. Check the number or contact support.', 'error');
+      }
+    } catch(err){
+      console.error('Recovery check failed:', err);
+      setStatus('Could not check right now. Please try again.', 'error');
+    }
   }
 
   // On page load, check if this device already unlocked it
