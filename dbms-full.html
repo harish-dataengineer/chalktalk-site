@@ -549,6 +549,7 @@
 
     let paymentVerified = false;
     let userPhone = "";
+    let firebaseToken = "";
 
 
     function showUnlockedView() {
@@ -672,299 +673,335 @@
 
     async function payNow() {
 
-      const phone = getPhone();
+  const phone = getPhone();
 
-      if (phone.length !== 10) {
+  if (phone.length !== 10) {
 
-        setStatus(
-          'Please enter a valid 10-digit phone number.',
-          'error'
-        );
+    setStatus(
+      'Please enter a valid 10-digit phone number.',
+      'error'
+    );
 
-        return;
-      }
+    return;
+  }
 
-      userPhone = "+91" + phone;
+  userPhone = "+91" + phone;
+
+
+  // ------------------------------------------------
+  // FIRST: Verify phone with Firebase OTP
+  // ------------------------------------------------
+
+  if (!firebaseToken) {
+
+    setStatus(
+      'Sending OTP to verify your phone...',
+      ''
+    );
+
+    const otpResult =
+      await sendOTP(userPhone);
+
+
+    if (otpResult.success) {
+
+      document
+        .getElementById('otp-section')
+        .style.display = 'block';
 
       setStatus(
-        'Setting up secure payment...',
+        'OTP sent successfully. Please enter the OTP.',
+        'success'
+      );
+
+    } else {
+
+      setStatus(
+        'Could not send OTP: ' +
+        otpResult.error,
+        'error'
+      );
+
+    }
+
+    return;
+  }
+
+
+  // ------------------------------------------------
+  // Firebase verified → NOW create Razorpay order
+  // ------------------------------------------------
+
+  setStatus(
+    'Setting up secure payment...',
+    ''
+  );
+
+  let order;
+
+  try {
+
+    const orderRes =
+      await fetch('/api/create-order', {
+
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+          amount: 9900,
+          subject: SUBJECT
+        })
+      });
+
+    order = await orderRes.json();
+
+
+    if (!order.orderId) {
+      throw new Error(
+        order.error || 'No order returned'
+      );
+    }
+
+  } catch (err) {
+
+    console.error(
+      'Order creation failed:',
+      err
+    );
+
+    setStatus(
+      'Could not start payment. Please try again.',
+      'error'
+    );
+
+    return;
+  }
+
+
+  // ------------------------------------------------
+  // Razorpay checkout
+  // ------------------------------------------------
+
+  const options = {
+
+    key: order.keyId,
+
+    amount: order.amount,
+
+    currency: order.currency,
+
+    order_id: order.orderId,
+
+    name: "ChalkTalk",
+
+    description:
+      "DBMS Full Notes — Units 2 to 5",
+
+
+    handler: async function (response) {
+
+      setStatus(
+        'Verifying your payment...',
         ''
       );
 
-      let order;
-
       try {
 
-        const orderRes =
-          await fetch('/api/create-order', {
+        const verifyRes =
+          await fetch(
+            '/api/verify-payment',
+            {
 
-            method: 'POST',
+              method: 'POST',
 
-            headers: {
-              'Content-Type': 'application/json'
-            },
+              headers: {
+                'Content-Type':
+                  'application/json'
+              },
 
-            body: JSON.stringify({
-              amount: 9900,
-              subject: SUBJECT
-            })
+              body: JSON.stringify({
+
+                razorpay_order_id:
+                  response.razorpay_order_id,
+
+                razorpay_payment_id:
+                  response.razorpay_payment_id,
+
+                razorpay_signature:
+                  response.razorpay_signature,
+
+                // IMPORTANT: Send Firebase token
+                firebaseToken:
+                  firebaseToken,
+
+                subject:
+                  SUBJECT
+              })
+            }
+          );
+
+
+        const result =
+          await verifyRes.json();
+
+
+        if (
+          result.verified &&
+          result.unlocked
+        ) {
+
+          paymentVerified = true;
+
+          localStorage.setItem(
+            UNLOCK_KEY,
+            'true'
+          );
+
+          setStatus(
+            'Payment successful! Unlocking notes...',
+            'success'
+          );
+
+          showUnlockedView();
+
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
           });
 
-        order = await orderRes.json();
+        } else {
 
-        if (!order.orderId) {
-          throw new Error('No order returned');
+          setStatus(
+            result.error ||
+            'Payment could not be verified. Contact support if money was deducted.',
+            'error'
+          );
         }
 
       } catch (err) {
 
         console.error(
-          'Order creation failed:',
+          'Verification failed:',
           err
         );
 
         setStatus(
-          'Could not start payment. Please try again.',
+          'Payment succeeded but verification failed. Contact support with payment ID: ' +
+          response.razorpay_payment_id,
           'error'
         );
-
-        return;
       }
+    },
 
 
-      const options = {
-
-        key: order.keyId,
-
-        amount: order.amount,
-
-        currency: order.currency,
-
-        order_id: order.orderId,
-
-        name: "ChalkTalk",
-
-        description:
-          "DBMS Full Notes — Units 2 to 5",
+    theme: {
+      color: "#B23A2F"
+    },
 
 
-        handler: async function (response) {
-
-          setStatus(
-            'Verifying your payment...',
-            ''
-          );
-
-          try {
-
-            const verifyRes =
-              await fetch(
-                '/api/verify-payment',
-                {
-
-                  method: 'POST',
-
-                  headers: {
-                    'Content-Type':
-                      'application/json'
-                  },
-
-                  body: JSON.stringify({
-
-                    razorpay_order_id:
-                      response.razorpay_order_id,
-
-                    razorpay_payment_id:
-                      response.razorpay_payment_id,
-
-                    razorpay_signature:
-                      response.razorpay_signature,
-
-                    phone: phone,
-
-                    subject: SUBJECT
-                  })
-                }
-              );
-
-            const result =
-              await verifyRes.json();
+    modal: {
+      ondismiss: function () {
+        setStatus('', '');
+      }
+    }
+  };
 
 
-            if (
-              result.verified &&
-              result.unlocked
-            ) {
-
-              paymentVerified = true;
-
-              setStatus(
-                'Payment successful! Sending OTP to verify your phone...',
-                'success'
-              );
-
-              const otpResult =
-                await sendOTP(userPhone);
+  const rzp =
+    new Razorpay(options);
 
 
-              if (otpResult.success) {
+  rzp.on(
+    'payment.failed',
 
-                document
-                  .getElementById('otp-section')
-                  .style.display = 'block';
+    function (response) {
 
-                setStatus(
-                  'OTP sent successfully. Please enter the OTP.',
-                  'success'
-                );
-
-              } else {
-
-                setStatus(
-                  'Payment successful, but OTP could not be sent: ' +
-                  otpResult.error,
-                  'error'
-                );
-              }
-
-            } else {
-
-              setStatus(
-                'Payment could not be verified. Contact support if money was deducted.',
-                'error'
-              );
-            }
-
-          } catch (err) {
-
-            console.error(
-              'Verification failed:',
-              err
-            );
-
-            setStatus(
-              'Payment succeeded but verification failed. Contact support with payment ID: ' +
-              response.razorpay_payment_id,
-              'error'
-            );
-          }
-        },
-
-
-        theme: {
-          color: "#B23A2F"
-        },
-
-
-        modal: {
-          ondismiss: function () {
-            setStatus('', '');
-          }
-        }
-      };
-
-
-      const rzp =
-        new Razorpay(options);
-
-
-      rzp.on(
-        'payment.failed',
-
-        function (response) {
-
-          console.error(
-            'RAZORPAY PAYMENT FAILED:',
-            response.error
-          );
-
-          const errorMessage =
-            response.error.description ||
-            response.error.reason ||
-            'Payment could not be completed.';
-
-          setStatus(
-            'Payment Failed: ' +
-            errorMessage,
-            'error'
-          );
-        }
+      console.error(
+        'RAZORPAY PAYMENT FAILED:',
+        response.error
       );
 
+      const errorMessage =
+        response.error.description ||
+        response.error.reason ||
+        'Payment could not be completed.';
 
-      rzp.open();
+      setStatus(
+        'Payment Failed: ' +
+        errorMessage,
+        'error'
+      );
     }
+  );
+
+
+  rzp.open();
+}
 
 
     async function verifyOTPAndUnlock() {
 
-      if (!paymentVerified) {
-
-        setStatus(
-          'Please complete payment first.',
-          'error'
-        );
-
-        return;
-      }
+  const code =
+    document
+      .getElementById('ct-otp')
+      .value
+      .trim();
 
 
-      const code =
-        document
-          .getElementById('ct-otp')
-          .value
-          .trim();
+  if (!/^\d{6}$/.test(code)) {
+
+    setStatus(
+      'Please enter a valid 6-digit OTP.',
+      'error'
+    );
+
+    return;
+  }
 
 
-      if (!/^\d{6}$/.test(code)) {
-
-        setStatus(
-          'Please enter a valid 6-digit OTP.',
-          'error'
-        );
-
-        return;
-      }
+  setStatus(
+    'Verifying OTP...',
+    ''
+  );
 
 
-      setStatus(
-        'Verifying OTP...',
-        ''
-      );
+  const result =
+    await verifyOTP(code);
 
 
-      const result =
-        await verifyOTP(code);
+  if (result.success) {
+
+    // Save Firebase authentication token
+    firebaseToken = result.idToken;
 
 
-      if (result.success) {
+    setStatus(
+      'Phone verified successfully! Opening secure payment...',
+      'success'
+    );
 
-        localStorage.setItem(
-          UNLOCK_KEY,
-          'true'
-        );
 
-        setStatus(
-          'Phone verified successfully! Unlocking notes...',
-          'success'
-        );
+    // Hide OTP section
+    document
+      .getElementById('otp-section')
+      .style.display = 'none';
 
-        showUnlockedView();
 
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
+    // Now Firebase is verified → open Razorpay
+    await payNow();
 
-      } else {
+  } else {
 
-        setStatus(
-          'Invalid OTP: ' +
-          result.error,
-          'error'
-        );
-      }
-    }
+    setStatus(
+      'Invalid OTP: ' +
+      result.error,
+      'error'
+    );
+  }
+}
 
 
     async function recoverAccess() {
