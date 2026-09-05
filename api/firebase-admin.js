@@ -1,4 +1,5 @@
 import { initializeApp, cert, getApps } from "firebase-admin/app";
+import admin from "firebase-admin";
 
 if (!getApps().length) {
   initializeApp({
@@ -9,3 +10,5 @@ if (!getApps().length) {
     })
   });
 }
+
+export default admin;
