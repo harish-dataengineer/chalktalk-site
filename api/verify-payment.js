@@ -164,17 +164,12 @@ export default async function handler(req, res) {
 
 
     const signatureIsValid =
-
-      expectedSignature.length ===
-        razorpay_signature.length &&
-
-      crypto.timingSafeEqual(
-
-        Buffer.from(expectedSignature),
-
-        Buffer.from(razorpay_signature)
-
-      );
+  typeof razorpay_signature === "string" &&
+  expectedSignature.length === razorpay_signature.length &&
+  crypto.timingSafeEqual(
+    Buffer.from(expectedSignature),
+    Buffer.from(razorpay_signature)
+  );
 
 
     if (!signatureIsValid) {
