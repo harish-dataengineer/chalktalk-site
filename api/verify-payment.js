@@ -1,12 +1,19 @@
 // ============================================================================
 // Verifies that a payment success message actually came from Razorpay (not
-// faked by someone editing the page), then records the purchase so it can
-// be recovered later if the student switches devices or clears their browser.
+// faked by someone editing the page), then:
+//   1. Records the purchase in Vercel KV (for phone-based access recovery)
+//   2. Logs the purchase to your Google Sheet (for your own record-keeping)
+//   3. Sends the buyer a confirmation email via SendGrid
 //
-// USES Vercel KV (a simple key-value database). Set it up once:
-//   Vercel Dashboard → your project → Storage tab → Create Database → KV
-//   This automatically adds the required environment variables for you —
-//   you don't need to create any separate account or copy any keys manually.
+// Steps 2 and 3 are "best effort" — if either fails, the student still gets
+// unlocked (the payment was real either way). We just log the failure so
+// you can notice and fix it, rather than blocking a paying student.
+//
+// ENV VARS NEEDED (Vercel → Settings → Environment Variables):
+//   RAZORPAY_KEY_SECRET   — used to verify the payment signature
+//   SENDGRID_API_KEY      — from https://app.sendgrid.com/ (see setup notes below)
+//   SENDER_EMAIL          — the single sender email you verified in SendGrid
+//   SHEET_WEBHOOK_URL     — your Google Apps Script Web App URL (see setup notes)
 // ============================================================================
 
 import crypto from 'crypto';
@@ -22,6 +29,7 @@ export default async function handler(req, res) {
     razorpay_payment_id,
     razorpay_signature,
     phone,
+    email,
     subject
   } = req.body;
 
@@ -47,24 +55,71 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Payment could not be verified', verified: false });
   }
 
-  // ---- Step 2: record the purchase so it's recoverable later ----
+  // ---- Step 2: record the purchase in Vercel KV ----
   const cleanPhone = phone.replace(/\D/g, ''); // keep digits only
   const subjectKey = subject || 'dbms';
+  const purchasedAt = new Date().toISOString();
 
   const record = {
     phone: cleanPhone,
+    email: email || '',
     subject: subjectKey,
     paymentId: razorpay_payment_id,
     orderId: razorpay_order_id,
-    purchasedAt: new Date().toISOString()
+    purchasedAt
   };
 
   try {
     await kv.set(`purchase:${subjectKey}:${cleanPhone}`, record);
   } catch (err) {
-    // Payment is real either way — don't block the student's access just
-    // because the record-keeping step failed. Log it so you can fix later.
-    console.error('Failed to save purchase record:', err);
+    console.error('Failed to save purchase record to KV:', err);
+  }
+
+  // ---- Step 3: log to Google Sheet (best effort, never blocks unlock) ----
+  const sheetWebhookUrl = process.env.SHEET_WEBHOOK_URL;
+  if (sheetWebhookUrl) {
+    try {
+      await fetch(sheetWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(record)
+      });
+    } catch (err) {
+      console.error('Failed to log purchase to Google Sheet:', err);
+    }
+  }
+
+  // ---- Step 4: send confirmation email via SendGrid (best effort) ----
+  const sendgridKey = process.env.SENDGRID_API_KEY;
+  const senderEmail = process.env.SENDER_EMAIL;
+  if (sendgridKey && senderEmail && email) {
+    try {
+      await fetch('https://api.sendgrid.com/v3/mail/send', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${sendgridKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          personalizations: [{ to: [{ email }] }],
+          from: { email: senderEmail, name: 'ChalkTalk' },
+          subject: 'Your ChalkTalk purchase — DBMS Full Notes',
+          content: [{
+            type: 'text/plain',
+            value:
+              `Thanks for your purchase!\n\n` +
+              `You've unlocked the full DBMS notes (Units 2–5) on ChalkTalk.\n\n` +
+              `Payment ID: ${razorpay_payment_id}\n` +
+              `Amount: ₹99\n` +
+              `Date: ${purchasedAt}\n\n` +
+              `You can access your notes anytime at your ChalkTalk link. If you switch devices, use "Recover my access" with this phone number: ${cleanPhone}\n\n` +
+              `Happy studying!\n— ChalkTalk`
+          }]
+        })
+      });
+    } catch (err) {
+      console.error('Failed to send confirmation email:', err);
+    }
   }
 
   return res.status(200).json({ verified: true, unlocked: true });

@@ -350,7 +350,7 @@
     <p style="color:var(--ink-soft); margin:0;">Tip: Draw the 3-box diagram above first, label all three levels, then write 2-3 lines per level using the exam-language definitions — don't skip the diagram, it's usually worth 3-4 marks alone.</p>
   </div>
 
-  <div class="locked-cta">
+  <div class="locked-cta" id="ct-unit1-cta">
     <h3>Like this? Unit 1 continues...</h3>
     <p>Parallel &amp; distributed databases, specialty databases (NoSQL, spatial, temporal), and 4 more practice questions — plus all 5 units, SQL practice sets, and the normalization numericals nobody else explains properly.</p>
     <a class="btn-primary" href="dbms-full.html">Unlock Full DBMS Notes — ₹99</a>
@@ -361,6 +361,24 @@
   </footer>
 
 </div>
+<script>
+  // If this device already unlocked DBMS (paid, or recovered access),
+  // swap the sales pitch for a simple "continue" link instead of asking
+  // them to pay again.
+  (function(){
+    const alreadyUnlocked = localStorage.getItem('chalktalk_dbms_unlocked') === 'true';
+    if(alreadyUnlocked){
+      const cta = document.getElementById('ct-unit1-cta');
+      if(cta){
+        cta.innerHTML = `
+          <h3>You've already unlocked this!</h3>
+          <p>Units 2 to 5 are waiting for you — normalization numericals, SQL practice, all of it.</p>
+          <a class="btn-primary" href="dbms-full.html">Continue to Units 2–5 →</a>
+        `;
+      }
+    }
+  })();
+</script>
 <script src="chat-widget.js"></script>
 </body>
 </html>

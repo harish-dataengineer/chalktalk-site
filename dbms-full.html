@@ -333,6 +333,7 @@
   // ---------------------------------------------------------------
 
   const UNLOCK_KEY = 'chalktalk_dbms_unlocked';
+  const PHONE_KEY = 'chalktalk_phone';
   const SUBJECT = 'dbms';
 
   function showUnlockedView(){
@@ -346,9 +347,34 @@
     el.className = type || '';
   }
 
-  function checkUnlockStatus(){
+  async function checkUnlockStatus(){
+    // Fast path: already confirmed unlocked on this device
     if(localStorage.getItem(UNLOCK_KEY) === 'true'){
       showUnlockedView();
+      return;
+    }
+
+    // Fallback: if we remember a phone number from a past purchase on this
+    // device, silently re-check the server record. This means even if
+    // localStorage got cleared (private browsing, browser settings, etc),
+    // a real buyer doesn't get asked to pay again.
+    const savedPhone = localStorage.getItem(PHONE_KEY);
+    if(savedPhone){
+      try{
+        const res = await fetch('/api/check-purchase', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ phone: savedPhone, subject: SUBJECT })
+        });
+        const data = await res.json();
+        if(data.unlocked){
+          localStorage.setItem(UNLOCK_KEY, 'true');
+          showUnlockedView();
+        }
+      } catch(err){
+        console.error('Silent unlock re-check failed:', err);
+        // Fail quietly — student just sees the normal paywall, no harm done
+      }
     }
   }
 
@@ -407,6 +433,7 @@
           const result = await verifyRes.json();
           if(result.verified && result.unlocked){
             localStorage.setItem(UNLOCK_KEY, 'true');
+            localStorage.setItem(PHONE_KEY, phone);
             showUnlockedView();
             window.scrollTo({top: 0, behavior: 'smooth'});
           } else {
@@ -445,6 +472,7 @@
       const data = await res.json();
       if(data.unlocked){
         localStorage.setItem(UNLOCK_KEY, 'true');
+        localStorage.setItem(PHONE_KEY, phone);
         showUnlockedView();
         window.scrollTo({top: 0, behavior: 'smooth'});
       } else {
