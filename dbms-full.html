@@ -358,10 +358,6 @@
   }
 
   async function payNow(){
-    // Public key — safe to be visible in frontend code. The secret key
-    // that actually verifies payments lives only on the backend.
-    const RAZORPAY_KEY_ID = "rzp_live_TXWENAbhbbdIQj";
-
     const phone = getPhone();
     if(phone.length < 10){
       setStatus('Please enter a valid phone number first.', 'error');
@@ -377,7 +373,10 @@
         body: JSON.stringify({ amount: 9900, subject: SUBJECT })
       });
       order = await orderRes.json();
-      if(!order.orderId) throw new Error('No order returned');
+      if(!order.orderId || !order.keyId){
+        console.error('Order creation problem:', order);
+        throw new Error(order.error || 'No order returned');
+      }
     } catch(err){
       console.error('Order creation failed:', err);
       setStatus('Could not start payment. Please try again.', 'error');
@@ -385,7 +384,7 @@
     }
 
     const options = {
-      key: RAZORPAY_KEY_ID,
+      key: order.keyId, // always the same key the backend used to create this order
       amount: order.amount,
       currency: order.currency,
       order_id: order.orderId,
