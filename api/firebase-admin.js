@@ -4,7 +4,9 @@ import admin from "firebase-admin";
 const privateKey = process.env.FIREBASE_PRIVATE_KEY;
 
 if (!privateKey) {
-  throw new Error("FIREBASE_PRIVATE_KEY environment variable is missing");
+  throw new Error(
+    "FIREBASE_PRIVATE_KEY environment variable is missing"
+  );
 }
 
 if (!getApps().length) {
