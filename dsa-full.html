@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced DSA — Full Notes | ChalkTalk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@600;700&family=Lexend:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+  :root{
+    --paper: #FAF7EF; --paper-line: #C7D3E8; --ink: #1D3557; --ink-soft: #4A5A78;
+    --pencil: #7A7368; --red-pen: #B23A2F; --red-pen-soft: #E8B5AE;
+    --highlight: #F4D35E; --highlight-soft: #FBEAB0; --green: #2C7A4B; --green-soft: #D9EEE0;
+    --card-shadow: rgba(29,53,87,0.08);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--paper);
+    background-image:repeating-linear-gradient(to bottom, transparent 0px, transparent 37px, var(--paper-line) 38px);
+    background-attachment:local; color:var(--ink); font-family:'Lexend', sans-serif; line-height:1.65;
+  }
+  a{color:var(--red-pen);}
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px 80px;}
+
+  header.site{
+    padding:24px 0 16px; border-bottom:2px solid var(--ink);
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
+  }
+  .brand{font-family:'Patrick Hand', cursive; font-size:1.4rem; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:8px;}
+  .brand .dot{width:10px; height:10px; border-radius:50%; background:var(--red-pen); display:inline-block;}
+  .back{font-size:0.9rem; color:var(--ink-soft); text-decoration:none;}
+  .back:hover{color:var(--red-pen);}
+
+  .lesson-head{padding:34px 0 10px;}
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:0.75rem; letter-spacing:0.05em; text-transform:uppercase;
+    color:var(--red-pen); background:var(--highlight-soft); padding:4px 10px; border-radius:3px;
+    display:inline-block; transform:rotate(-1deg);
+  }
+  h1.title{font-family:'Caveat', cursive; font-weight:700; font-size:3rem; margin:14px 0 6px; line-height:1.1;}
+  .meta{color:var(--pencil); font-size:0.9rem; margin-bottom:20px;}
+
+  h2.unit-head{
+    font-family:'Lexend'; font-weight:700; font-size:1.6rem; margin:50px 0 6px;
+    padding-top:20px; border-top:2px dashed var(--paper-line);
+  }
+  h2.unit-head:first-of-type{border-top:none; padding-top:0;}
+  h3.topic{font-family:'Lexend'; font-weight:600; font-size:1.15rem; margin:26px 0 4px; color:var(--ink);}
+
+  .eli5{
+    background:var(--highlight-soft); border:2px solid var(--ink); border-radius:8px;
+    padding:18px 20px; margin:14px 0 18px; position:relative; box-shadow:4px 4px 0 var(--card-shadow);
+  }
+  .eli5::before{
+    content:"Explain like I'm 10"; position:absolute; top:-13px; left:16px; background:var(--red-pen); color:#fff;
+    font-family:'Patrick Hand', cursive; font-size:1rem; padding:2px 12px; border-radius:4px; transform:rotate(-2deg);
+  }
+  .eli5 p{margin:6px 0 0;}
+  .eli5 p:first-child{margin-top:0;}
+
+  .now-formal{margin:16px 0;}
+  .now-formal .label{font-family:'Patrick Hand', cursive; color:var(--ink-soft); font-size:1rem; margin-bottom:6px; display:block;}
+  .now-formal p{margin:0 0 10px;}
+
+  .numeric-box{
+    background:#fff; border:2px solid var(--ink); border-radius:8px; padding:18px 20px; margin:16px 0;
+  }
+  .numeric-box .label{
+    font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:var(--red-pen); text-transform:uppercase;
+    letter-spacing:0.05em; margin-bottom:10px; display:block;
+  }
+  .numeric-box table{width:100%; border-collapse:collapse; margin:8px 0; font-size:0.9rem;}
+  .numeric-box th, .numeric-box td{border:1px solid var(--paper-line); padding:6px 10px; text-align:left;}
+  .numeric-box th{background:var(--paper); font-weight:600;}
+  .step{margin:10px 0 0; padding-left:16px; border-left:3px solid var(--green); }
+  .step .step-label{font-weight:600; color:var(--green); font-size:0.85rem;}
+
+  .exam-tag{
+    display:inline-flex; align-items:center; gap:6px; background:var(--green-soft); color:var(--green);
+    font-family:'JetBrains Mono', monospace; font-size:0.72rem; padding:3px 10px; border-radius:20px;
+    margin-bottom:10px; font-weight:500;
+  }
+  .exam-tag::before{content:"★";}
+
+  ul.simple-list{padding-left:22px; margin:10px 0;}
+  ul.simple-list li{margin-bottom:6px;}
+
+  .qbox{border:2px solid var(--ink); border-radius:8px; padding:18px 20px; margin:16px 0; background:#fff;}
+  .qbox .qhead{font-weight:600; margin-bottom:8px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+  .qbox .qhead .marks{font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:var(--red-pen); white-space:nowrap;}
+
+  /* ---------- Paywall ---------- */
+  #locked-view{padding:60px 0;}
+  .paywall-card{
+    border:2px solid var(--ink); border-radius:12px; background:#fff; padding:36px 30px;
+    text-align:center; box-shadow:6px 6px 0 var(--card-shadow);
+  }
+  .paywall-card h2{font-family:'Caveat', cursive; font-size:2.4rem; margin:0 0 6px;}
+  .paywall-card p.desc{color:var(--ink-soft); max-width:460px; margin:0 auto 22px;}
+  .price-tag{
+    font-family:'Caveat', cursive; font-size:2.6rem; color:var(--red-pen); margin:10px 0 4px;
+  }
+  .price-note{color:var(--pencil); font-size:0.85rem; margin-bottom:24px;}
+  .includes{
+    text-align:left; max-width:380px; margin:0 auto 26px; list-style:none; padding:0;
+  }
+  .includes li{margin-bottom:8px; font-size:0.92rem; display:flex; gap:8px;}
+  .includes li::before{content:"✓"; color:var(--green); font-weight:700;}
+  .btn-pay{
+    display:inline-block; background:var(--red-pen); color:#fff; font-weight:600; font-size:1.05rem;
+    padding:14px 34px; border-radius:8px; text-decoration:none; border:2px solid var(--red-pen); cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn-pay:hover{transform:translateY(-2px); box-shadow:3px 4px 0 var(--ink);}
+  .paywall-foot{font-size:0.8rem; color:var(--pencil); margin-top:16px;}
+  .phone-input{
+    width:100%; max-width:340px; border:2px solid var(--paper-line); border-radius:8px;
+    padding:11px 14px; font-family:'Lexend'; font-size:0.95rem; margin-bottom:16px; outline:none;
+  }
+  .phone-input:focus{border-color:var(--red-pen);}
+  .recover-link{font-size:0.85rem; color:var(--pencil); margin-top:14px;}
+  .recover-link a{color:var(--ink-soft); text-decoration:underline;}
+  #ct-status-msg{font-size:0.85rem; margin-top:10px; min-height:18px;}
+  #ct-status-msg.error{color:var(--red-pen);}
+  #ct-status-msg.success{color:var(--green);}
+
+  #unlocked-view{display:none;}
+  .unlocked-banner{
+    background:var(--green-soft); border:2px solid var(--green); border-radius:8px;
+    padding:12px 18px; margin-bottom:30px; font-size:0.9rem; color:var(--green); font-weight:500;
+    display:flex; align-items:center; gap:8px;
+  }
+
+  footer{border-top:2px solid var(--ink); padding:24px 0 0; margin-top:40px; color:var(--pencil); font-size:0.85rem;}
+
+  @media (max-width:640px){
+    h1.title{font-size:2.2rem;}
+    .paywall-card{padding:28px 20px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="site">
+    <a class="brand" href="index.html"><span class="dot"></span>ChalkTalk</a>
+    <div style="display:flex; gap:16px; align-items:center;">
+      <a class="back" href="about.html">About</a>
+      <a class="back" href="lesson-dsa-unit1.html">← Back to Unit 1</a>
+    </div>
+  </header>
+
+  <div class="lesson-head">
+    <span class="eyebrow">Advanced DSA · Units 2–5 · Full Notes</span>
+    <h1 class="title">The Rest of Advanced DSA, Simplified</h1>
+    <p class="meta">Relational model, ER &amp; SQL, normalization, indexing — all four remaining units, same simple-first style.</p>
+  </div>
+
+  <!-- ======= LOCKED / PAYWALL VIEW ======= -->
+  <div id="locked-view">
+    <div class="paywall-card">
+      <h2>Unlock the Full Advanced DSA Notes</h2>
+      <p class="desc">You've read Unit 1 free. These four units cover everything the rest of your Advanced DSA exam is built on — including AVL trees, greedy algorithms, dynamic programming, and backtracking, all worked step-by-step.</p>
+      <div class="price-tag">₹99</div>
+      <div class="price-note">one-time payment · lifetime access to this subject</div>
+      <ul class="includes">
+        <li>Units 2, 3, 4 &amp; 5 — full simple-first explanations</li>
+        <li>Worked DP problems (0/1 Knapsack, shortest paths, step by step)</li>
+        <li>Practice questions mapped to your syllabus</li>
+        <li>Exam-format model answers, not just theory</li>
+      </ul>
+      <input id="ct-phone" type="tel" placeholder="Your phone number (for your access)" class="phone-input" inputmode="numeric">
+      <input id="ct-email" type="email" placeholder="Your email (for your receipt)" class="phone-input">
+      <button class="btn-pay" onclick="payNow()">Pay ₹99 &amp; Unlock</button>
+      <p class="paywall-foot">Secure payment via Razorpay (UPI, cards, netbanking)</p>
+      <p class="recover-link">Already paid on another device? <a href="#" onclick="recoverAccess(); return false;">Recover my access</a></p>
+      <div id="ct-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- ======= UNLOCKED CONTENT VIEW ======= -->
+  <div id="unlocked-view">
+    <div class="unlocked-banner">✓ Unlocked — thanks for supporting ChalkTalk. This stays unlocked on this device.</div>
+    <h2 class="unit-head">Unit 2 — AVL Trees, B-Trees &amp; Priority Queues</h2>
+
+    <h3 class="topic">AVL Trees — trees that keep themselves balanced</h3>
+    <div class="eli5">
+      <p>Imagine a family tree that keeps growing only on one side — eventually it becomes a long, lopsided line instead of a nice branching tree, and finding anyone in it means walking down that entire line one by one.</p>
+      <p>An <strong>AVL Tree</strong> is a binary search tree with a built-in rule: after every insertion or deletion, it checks if one side got too much taller than the other, and if so, it automatically "rotates" itself back into balance — like gently rearranging branches so no side gets too heavy.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p>An AVL Tree is a self-balancing binary search tree where the difference in height between left and right subtrees (the <strong>balance factor</strong>) is always -1, 0, or +1 for every node. Rotations (LL, RR, LR, RL) restore balance after insertions/deletions, keeping search, insert, and delete operations at O(log n).</p>
+    </div>
+
+    <h3 class="topic">B-Trees — built for huge, disk-based data</h3>
+    <div class="eli5">
+      <p>Imagine a library so massive it spans multiple buildings. Instead of one bookshelf per book, each shelf holds several books AND signposts pointing to other shelves. You check fewer signposts overall because each one holds more information at once.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p>A <strong>B-Tree</strong> is a self-balancing search tree where each node can hold multiple keys and multiple children (not just two, like a binary tree). This makes B-Trees ideal for databases and file systems, where minimizing disk reads matters more than minimizing comparisons.</p>
+    </div>
+
+    <h3 class="topic">Priority Queues &amp; Heaps</h3>
+    <div class="exam-tag">High — heap operations asked frequently</div>
+    <div class="eli5">
+      <p>Imagine a hospital emergency room. Patients aren't treated in the order they arrived — the most critical case always goes first, regardless of queue position. That's exactly what a <strong>priority queue</strong> does with data: the highest (or lowest) priority item always comes out first.</p>
+      <p>A <strong>Heap</strong> is simply the data structure used to implement this efficiently — a special tree shape where the top element is always the most urgent one.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p>A <strong>Binary Heap</strong> is a complete binary tree satisfying the heap property: in a <strong>Max Heap</strong>, every parent is greater than or equal to its children; in a <strong>Min Heap</strong>, every parent is smaller. Insertion and deletion of the top element both run in O(log n).</p>
+    </div>
+    <div class="qbox">
+      <div class="qhead"><span>Explain the insertion operation in a Max Heap with an example.</span><span class="marks">10 marks</span></div>
+      <p style="color:var(--ink-soft); margin:0;">Tip: draw the tree at each step as you insert — examiners want to see the "bubble up" process, not just the final tree.</p>
+    </div>
+
+    <h2 class="unit-head">Unit 3 — Divide &amp; Conquer, Greedy Method</h2>
+
+    <h3 class="topic">Divide and Conquer — break it, solve it, combine it</h3>
+    <div class="eli5">
+      <p>Imagine sorting a massive pile of exam papers by roll number. Instead of comparing every paper to every other paper, you split the pile in half, ask a friend to sort one half while you sort the other, then merge both sorted piles back together. Each half is easier to handle alone.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p>Divide and Conquer breaks a problem into smaller subproblems of the same type, solves each recursively, then combines their results. <strong>Merge Sort</strong> and <strong>Quick Sort</strong> are classic examples — both run in O(n log n) on average.</p>
+    </div>
+
+    <h3 class="topic">Greedy Method — best choice right now, every time</h3>
+    <div class="exam-tag">Very high — Knapsack &amp; job sequencing asked almost every year</div>
+    <div class="eli5">
+      <p>Imagine you have a bag with limited space and a pile of items, each with a different value and weight. A greedy approach says: "grab the most valuable item per kilogram first, then the next best, and so on" — making the locally best choice at every step without looking back.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p>The <strong>Greedy Method</strong> builds a solution step by step, always choosing the option that looks best at that moment, without reconsidering earlier choices. Classic problems: <strong>Job Sequencing with Deadlines</strong> (maximize profit by ordering jobs before their deadlines), the <strong>Knapsack Problem</strong> (fractional version), and <strong>Minimum Cost Spanning Trees</strong> (Prim's/Kruskal's algorithms).</p>
+    </div>
+    <div class="qbox">
+      <div class="qhead"><span>Solve the Job Sequencing with Deadlines problem for a given set of jobs, profits, and deadlines.</span><span class="marks">10 marks</span></div>
+      <p style="color:var(--ink-soft); margin:0;">Tip: sort jobs by profit descending first, then place each job in the latest available slot before its deadline — show this table step by step for full marks.</p>
+    </div>
+
+    <h2 class="unit-head">Unit 4 — Dynamic Programming</h2>
+
+    <h3 class="topic">Dynamic Programming — remember what you've already solved</h3>
+    <div class="exam-tag">Very high — 0/1 Knapsack is a guaranteed question</div>
+    <div class="eli5">
+      <p>Imagine solving the same sub-problem again and again while climbing a staircase of decisions — like recalculating "what's the best way to reach step 5" every single time you need it. Dynamic Programming just says: solve it once, write the answer down, and reuse it instead of recalculating.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p><strong>Dynamic Programming</strong> solves a problem by breaking it into overlapping subproblems, solving each subproblem only once, and storing the results (memoization/tabulation) to avoid redundant work. Unlike Divide and Conquer, DP subproblems overlap and reuse previous results.</p>
+    </div>
+
+    <div class="numeric-box">
+      <span class="label">Worked example — 0/1 Knapsack (small case)</span>
+      <p>Items: (weight, value) = (1,1), (3,4), (4,5) — Knapsack capacity = 4</p>
+      <table>
+        <tr><th>Items considered \ Capacity</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
+        <tr><td>None</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>Item (1,1)</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        <tr><td>+ Item (3,4)</td><td>0</td><td>1</td><td>1</td><td>4</td><td>5</td></tr>
+        <tr><td>+ Item (4,5)</td><td>0</td><td>1</td><td>1</td><td>4</td><td>5</td></tr>
+      </table>
+      <div class="step"><span class="step-label">Reading the table:</span> each cell represents "best value using items so far, within this capacity." The final answer (bottom-right cell) is <strong>5</strong> — build this table left to right, row by row, for full marks.</div>
+    </div>
+
+    <div class="qbox">
+      <div class="qhead"><span>Solve the 0/1 Knapsack problem using Dynamic Programming for a given set of items and capacity.</span><span class="marks">10 marks</span></div>
+      <p style="color:var(--ink-soft); margin:0;">Tip: always draw the full DP table — examiners give marks for correctly filled cells even if your final answer is slightly off.</p>
+    </div>
+
+    <h3 class="topic">Bellman-Ford &amp; All-Pairs Shortest Paths</h3>
+    <div class="eli5">
+      <p>Imagine finding the cheapest route between cities, but some roads have tolls that could even be negative (a rebate!). Bellman-Ford carefully checks and rechecks every road multiple times to make sure it hasn't missed a cheaper path — slower than greedy shortest-path methods, but works even with negative weights.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p><strong>Bellman-Ford</strong> computes shortest paths from a single source even with negative edge weights, by relaxing all edges repeatedly (V−1 times). <strong>All-Pairs Shortest Path</strong> algorithms (like Floyd-Warshall, built via DP) find the shortest distance between every pair of nodes in one pass.</p>
+    </div>
+
+    <h2 class="unit-head">Unit 5 — Backtracking &amp; Branch and Bound</h2>
+
+    <h3 class="topic">Backtracking — try, fail, undo, try again</h3>
+    <div class="exam-tag">Very high — N-Queens is a guaranteed question</div>
+    <div class="eli5">
+      <p>Imagine solving a maze by walking forward, and the moment you hit a dead end, you don't give up — you walk back to the last junction and try a different path instead. Backtracking is exactly this: try a choice, and if it leads nowhere, undo it and try the next option.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p><strong>Backtracking</strong> builds a solution incrementally, abandoning a path as soon as it's clear it can't lead to a valid solution ("pruning"), then trying the next option. Classic problems: <strong>N-Queens</strong> (place N queens so none attack each other), <strong>Sum of Subsets</strong>, <strong>Graph Coloring</strong>, and <strong>Hamiltonian Cycles</strong>.</p>
+    </div>
+    <div class="qbox">
+      <div class="qhead"><span>Solve the 4-Queens problem using backtracking, showing all steps.</span><span class="marks">10 marks</span></div>
+      <p style="color:var(--ink-soft); margin:0;">Tip: draw the 4×4 board and show each placement attempt, including the ones that fail and get backtracked — examiners want to see the pruning, not just the final solution.</p>
+    </div>
+
+    <h3 class="topic">Branch and Bound — backtracking's smarter cousin</h3>
+    <div class="eli5">
+      <p>Backtracking abandons a path only when it's definitely wrong. Branch and Bound is more strategic — it estimates the *best possible outcome* down a path, and abandons it early if that best-case estimate still isn't good enough compared to a solution already found.</p>
+    </div>
+    <div class="now-formal">
+      <span class="label">Now in exam language:</span>
+      <p><strong>Branch and Bound</strong> explores solution paths like backtracking, but uses a bounding function to estimate the best possible result from a given point — pruning branches whose upper bound can't beat the current best solution. Commonly applied to <strong>0/1 Knapsack</strong> and the <strong>Travelling Salesperson Problem</strong> for more efficient exploration than plain backtracking.</p>
+    </div>
+
+    <div style="margin-top:50px; padding:20px; border:2px dashed var(--paper-line); border-radius:8px; text-align:center; color:var(--pencil); font-size:0.9rem;">
+      That's all 5 units of Advanced DSA. More subjects coming soon on ChalkTalk.
+    </div>
+  </div>
+
+
+  <footer>
+    <span>ChalkTalk · Advanced DSA full notes</span>
+  </footer>
+</div>
+
+<script>
+  // ---------------------------------------------------------------
+  // UNLOCK LOGIC — v2, backend-verified
+  // Flow: student enters phone → payNow() asks OUR backend to create a
+  // Razorpay order → Razorpay checkout opens → on success, we send the
+  // payment details to OUR backend → backend verifies the signature is
+  // genuinely from Razorpay → backend records the purchase → THEN we
+  // unlock. A localStorage flag is kept too, just to skip the network
+  // check on repeat visits from the same device — but the source of
+  // truth is the backend record, not the browser.
+  // ---------------------------------------------------------------
+
+  const UNLOCK_KEY = 'chalktalk_dsa_unlocked';
+  const PHONE_KEY = 'chalktalk_phone';
+  const SUBJECT = 'dsa';
+
+  function showUnlockedView(){
+    document.getElementById('locked-view').style.display = 'none';
+    document.getElementById('unlocked-view').style.display = 'block';
+  }
+
+  function setStatus(msg, type){
+    const el = document.getElementById('ct-status-msg');
+    el.textContent = msg;
+    el.className = type || '';
+  }
+
+  async function checkUnlockStatus(){
+    // Fast path: already confirmed unlocked on this device
+    if(localStorage.getItem(UNLOCK_KEY) === 'true'){
+      showUnlockedView();
+      return;
+    }
+
+    // Fallback: if we remember a phone number from a past purchase on this
+    // device, silently re-check the server record. This means even if
+    // localStorage got cleared (private browsing, browser settings, etc),
+    // a real buyer doesn't get asked to pay again.
+    const savedPhone = localStorage.getItem(PHONE_KEY);
+    if(savedPhone){
+      try{
+        const res = await fetch('/api/check-purchase', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ phone: savedPhone, subject: SUBJECT })
+        });
+        const data = await res.json();
+        if(data.unlocked){
+          localStorage.setItem(UNLOCK_KEY, 'true');
+          showUnlockedView();
+        }
+      } catch(err){
+        console.error('Silent unlock re-check failed:', err);
+        // Fail quietly — student just sees the normal paywall, no harm done
+      }
+    }
+  }
+
+  function getPhone(){
+    const phone = document.getElementById('ct-phone').value.trim();
+    return phone.replace(/\D/g, '');
+  }
+
+  function getEmail(){
+    return document.getElementById('ct-email').value.trim();
+  }
+
+  async function payNow(){
+    const phone = getPhone();
+    const email = getEmail();
+    if(phone.length < 10){
+      setStatus('Please enter a valid phone number first.', 'error');
+      return;
+    }
+    if(!email || !email.includes('@')){
+      setStatus('Please enter a valid email for your receipt.', 'error');
+      return;
+    }
+    setStatus('Setting up secure payment...', '');
+
+    let order;
+    try{
+      const orderRes = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ amount: 9900, subject: SUBJECT })
+      });
+      order = await orderRes.json();
+      if(!order.orderId || !order.keyId){
+        console.error('Order creation problem:', order);
+        throw new Error(order.error || 'No order returned');
+      }
+    } catch(err){
+      console.error('Order creation failed:', err);
+      setStatus('Could not start payment. Please try again.', 'error');
+      return;
+    }
+
+    const options = {
+      key: order.keyId, // always the same key the backend used to create this order
+      amount: order.amount,
+      currency: order.currency,
+      order_id: order.orderId,
+      name: "ChalkTalk",
+      description: "Advanced DSA Full Notes — Units 2 to 5",
+      handler: async function(response){
+        setStatus('Verifying your payment...', '');
+        try{
+          const verifyRes = await fetch('/api/verify-payment', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              phone: phone,
+              email: email,
+              subject: SUBJECT
+            })
+          });
+          const result = await verifyRes.json();
+          if(result.verified && result.unlocked){
+            localStorage.setItem(UNLOCK_KEY, 'true');
+            localStorage.setItem(PHONE_KEY, phone);
+            showUnlockedView();
+            window.scrollTo({top: 0, behavior: 'smooth'});
+          } else {
+            setStatus('Payment could not be verified. Contact support if money was deducted.', 'error');
+          }
+        } catch(err){
+          console.error('Verification failed:', err);
+          setStatus('Payment succeeded but verification failed — contact support with your payment ID: ' + response.razorpay_payment_id, 'error');
+        }
+      },
+      theme: { color: "#B23A2F" },
+      modal: {
+        ondismiss: function(){
+          setStatus('', '');
+        }
+      }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+  }
+
+  async function recoverAccess(){
+    const phone = getPhone();
+    if(phone.length < 10){
+      setStatus('Enter the phone number you used when you paid.', 'error');
+      return;
+    }
+    setStatus('Checking...', '');
+    try{
+      const res = await fetch('/api/check-purchase', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ phone, subject: SUBJECT })
+      });
+      const data = await res.json();
+      if(data.unlocked){
+        localStorage.setItem(UNLOCK_KEY, 'true');
+        localStorage.setItem(PHONE_KEY, phone);
+        showUnlockedView();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      } else {
+        setStatus('No purchase found for this number. Check the number or contact support.', 'error');
+      }
+    } catch(err){
+      console.error('Recovery check failed:', err);
+      setStatus('Could not check right now. Please try again.', 'error');
+    }
+  }
+
+  // On page load, check if this device already unlocked it
+  checkUnlockStatus();
+</script>
+<script src="chat-widget.js"></script>
+</body>
+</html>
