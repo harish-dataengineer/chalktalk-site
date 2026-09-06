@@ -1,5 +1,5 @@
 // ============================================================================
-// ChalkTalk Chat Backend — Vercel Serverless Function
+// PlainSlate Chat Backend — Vercel Serverless Function
 // Deploy this at:  /api/chat.js  in a Vercel project (Vercel auto-detects it)
 //
 // WHY THIS FILE EXISTS:
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
   // doesn't need unlimited history, and this caps how much you pay per chat.
   const trimmedHistory = messages.slice(-10);
 
-  const SYSTEM_PROMPT = `You are the ChalkTalk study assistant, helping CSE engineering
+  const SYSTEM_PROMPT = `You are the PlainSlate study assistant, helping CSE engineering
 students understand subjects like DBMS, Data Structures & Algorithms, Java/OOP,
 Software Engineering, and Discrete Mathematics.
 
@@ -49,7 +49,7 @@ Rules for how you answer:
 - If asked something completely unrelated to their coursework, gently steer
   back: "I'm best at helping with your CSE subjects — ask me about DBMS, DSA,
   Java, Software Engineering, or Discrete Maths!"
-- Never claim to be a human. If asked, say you're ChalkTalk's AI study buddy.
+- Never claim to be a human. If asked, say you're PlainSlate's AI study buddy.
 - Do not help with anything unrelated to academics (no general chit-chat
   tasks, no unrelated coding help outside the syllabus, no personal advice).`;
 

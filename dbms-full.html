@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DBMS — Full Notes | ChalkTalk</title>
+<title>DBMS Notes All Units — Important Questions & Normalization Numericals | PlainSlate</title>
+<meta name="description" content="Complete DBMS notes for Units 2-5: relational model, ER diagrams, SQL joins, normalization numericals solved step-by-step, indexing, and exam-format model answers.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@600;700&family=Lexend:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -146,7 +147,7 @@
 <div class="wrap">
 
   <header class="site">
-    <a class="brand" href="index.html"><span class="dot"></span>ChalkTalk</a>
+    <a class="brand" href="index.html"><span class="dot"></span>PlainSlate</a>
     <div style="display:flex; gap:16px; align-items:center;">
       <a class="back" href="about.html">About</a>
       <a class="back" href="lesson-dbms-unit1.html">← Back to Unit 1</a>
@@ -172,7 +173,8 @@
         <li>SQL practice questions mapped to your syllabus</li>
         <li>Exam-format model answers, not just theory</li>
       </ul>
-      <input id="ct-phone" type="tel" placeholder="Your phone number (for your receipt & access)" class="phone-input" inputmode="numeric">
+      <input id="ct-phone" type="tel" placeholder="Your phone number (for your access)" class="phone-input" inputmode="numeric">
+      <input id="ct-email" type="email" placeholder="Your email (for your receipt)" class="phone-input">
       <button class="btn-pay" onclick="payNow()">Pay ₹99 &amp; Unlock</button>
       <p class="paywall-foot">Secure payment via Razorpay (UPI, cards, netbanking)</p>
       <p class="recover-link">Already paid on another device? <a href="#" onclick="recoverAccess(); return false;">Recover my access</a></p>
@@ -182,7 +184,7 @@
 
   <!-- ======= UNLOCKED CONTENT VIEW ======= -->
   <div id="unlocked-view">
-    <div class="unlocked-banner">✓ Unlocked — thanks for supporting ChalkTalk. This stays unlocked on this device.</div>
+    <div class="unlocked-banner">✓ Unlocked — thanks for supporting PlainSlate. This stays unlocked on this device.</div>
 
     <h2 class="unit-head">Unit 2 — Relational Model &amp; Basic SQL</h2>
 
@@ -311,12 +313,12 @@
     </div>
 
     <div style="margin-top:50px; padding:20px; border:2px dashed var(--paper-line); border-radius:8px; text-align:center; color:var(--pencil); font-size:0.9rem;">
-      That's all 5 units of DBMS. Next up on ChalkTalk: Advanced Data Structures &amp; Algorithms.
+      That's all 5 units of DBMS. Next up on PlainSlate: Advanced Data Structures &amp; Algorithms.
     </div>
   </div>
 
   <footer>
-    <span>ChalkTalk · DBMS full notes</span>
+    <span>PlainSlate · DBMS full notes</span>
   </footer>
 </div>
 
@@ -383,10 +385,19 @@
     return phone.replace(/\D/g, '');
   }
 
+  function getEmail(){
+    return document.getElementById('ct-email').value.trim();
+  }
+
   async function payNow(){
     const phone = getPhone();
+    const email = getEmail();
     if(phone.length < 10){
       setStatus('Please enter a valid phone number first.', 'error');
+      return;
+    }
+    if(!email || !email.includes('@')){
+      setStatus('Please enter a valid email for your receipt.', 'error');
       return;
     }
     setStatus('Setting up secure payment...', '');
@@ -414,7 +425,7 @@
       amount: order.amount,
       currency: order.currency,
       order_id: order.orderId,
-      name: "ChalkTalk",
+      name: "PlainSlate",
       description: "DBMS Full Notes — Units 2 to 5",
       handler: async function(response){
         setStatus('Verifying your payment...', '');
@@ -427,6 +438,7 @@
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
               phone: phone,
+              email: email,
               subject: SUBJECT
             })
           });

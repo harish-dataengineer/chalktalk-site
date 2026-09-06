@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ChalkTalk AI Chat Widget
+   PlainSlate AI Chat Widget
    Drop this on any page with:  <script src="chat-widget.js"></script>
    It talks to your own backend at /api/chat (see api/chat.js) —
    never put an API key directly in this file.
@@ -75,7 +75,7 @@
   panel.id = 'ct-chat-panel';
   panel.innerHTML = `
     <div id="ct-chat-head">
-      <div>Ask ChalkTalk<span class="sub">Usually explains in one try</span></div>
+      <div>Ask PlainSlate<span class="sub">Usually explains in one try</span></div>
       <button id="ct-chat-close" aria-label="Close chat">✕</button>
     </div>
     <div id="ct-chat-messages">
@@ -144,7 +144,7 @@
     } catch(err){
       typingEl.remove();
       addMessage("Something went wrong reaching the AI. Please try again.", 'bot');
-      console.error('ChalkTalk chat error:', err);
+      console.error('PlainSlate chat error:', err);
     } finally {
       sendBtn.disabled = false;
     }

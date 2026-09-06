@@ -102,18 +102,18 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           personalizations: [{ to: [{ email }] }],
-          from: { email: senderEmail, name: 'ChalkTalk' },
-          subject: 'Your ChalkTalk purchase — DBMS Full Notes',
+          from: { email: senderEmail, name: 'PlainSlate' },
+          subject: 'Your PlainSlate purchase — DBMS Full Notes',
           content: [{
             type: 'text/plain',
             value:
               `Thanks for your purchase!\n\n` +
-              `You've unlocked the full DBMS notes (Units 2–5) on ChalkTalk.\n\n` +
+              `You've unlocked the full DBMS notes (Units 2–5) on PlainSlate.\n\n` +
               `Payment ID: ${razorpay_payment_id}\n` +
               `Amount: ₹99\n` +
               `Date: ${purchasedAt}\n\n` +
-              `You can access your notes anytime at your ChalkTalk link. If you switch devices, use "Recover my access" with this phone number: ${cleanPhone}\n\n` +
-              `Happy studying!\n— ChalkTalk`
+              `You can access your notes anytime at your PlainSlate link. If you switch devices, use "Recover my access" with this phone number: ${cleanPhone}\n\n` +
+              `Happy studying!\n— PlainSlate`
           }]
         })
       });
