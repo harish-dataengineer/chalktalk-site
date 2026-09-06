@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced DSA Unit 1 — Explained Simply | ChalkTalk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@600;700&family=Lexend:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #FAF7EF; --paper-line: #C7D3E8; --ink: #1D3557; --ink-soft: #4A5A78;
+    --pencil: #7A7368; --red-pen: #B23A2F; --red-pen-soft: #E8B5AE;
+    --highlight: #F4D35E; --highlight-soft: #FBEAB0; --green: #2C7A4B; --green-soft: #D9EEE0;
+    --card-shadow: rgba(29,53,87,0.08);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--paper);
+    background-image:repeating-linear-gradient(to bottom, transparent 0px, transparent 37px, var(--paper-line) 38px);
+    background-attachment:local; color:var(--ink); font-family:'Lexend', sans-serif; line-height:1.65;
+  }
+  a{color:var(--red-pen);}
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px 80px;}
+
+  header.site{
+    padding:24px 0 16px; border-bottom:2px solid var(--ink);
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
+  }
+  .brand{font-family:'Patrick Hand', cursive; font-size:1.4rem; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:8px;}
+  .brand .dot{width:10px; height:10px; border-radius:50%; background:var(--red-pen); display:inline-block;}
+  .back{font-size:0.9rem; color:var(--ink-soft); text-decoration:none;}
+  .back:hover{color:var(--red-pen);}
+
+  .lesson-head{padding:34px 0 10px;}
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:0.75rem; letter-spacing:0.05em;
+    text-transform:uppercase; color:var(--red-pen); background:var(--highlight-soft);
+    padding:4px 10px; border-radius:3px; display:inline-block; transform:rotate(-1deg);
+  }
+  h1.title{
+    font-family:'Caveat', cursive; font-weight:700; font-size:3rem; margin:14px 0 6px; line-height:1.1;
+  }
+  .meta{color:var(--pencil); font-size:0.9rem; margin-bottom:20px;}
+
+  h2.topic{
+    font-family:'Lexend'; font-weight:700; font-size:1.5rem; margin:46px 0 6px;
+    padding-top:16px; border-top:2px dashed var(--paper-line);
+  }
+  h2.topic:first-of-type{border-top:none; padding-top:0; margin-top:24px;}
+  .topic-num{color:var(--red-pen); font-family:'JetBrains Mono'; font-size:0.9rem; margin-right:6px;}
+
+  .eli5{
+    background:var(--highlight-soft);
+    border:2px solid var(--ink);
+    border-radius:8px;
+    padding:18px 20px;
+    margin:14px 0 18px;
+    position:relative;
+    box-shadow:4px 4px 0 var(--card-shadow);
+  }
+  .eli5::before{
+    content:"Explain like I'm 10";
+    position:absolute; top:-13px; left:16px;
+    background:var(--red-pen); color:#fff;
+    font-family:'Patrick Hand', cursive; font-size:1rem;
+    padding:2px 12px; border-radius:4px;
+    transform:rotate(-2deg);
+  }
+  .eli5 p{margin:6px 0 0;}
+  .eli5 p:first-child{margin-top:0;}
+  .eli5-art{width:100%; max-width:100%; height:auto; margin-top:14px; display:block;}
+
+  .now-formal{margin:18px 0;}
+  .now-formal .label{
+    font-family:'Patrick Hand', cursive; color:var(--ink-soft); font-size:1.05rem; margin-bottom:6px; display:block;
+  }
+  .now-formal p{margin:0 0 10px;}
+
+  .example-box{
+    background:#fff; border:2px solid var(--paper-line); border-radius:8px;
+    padding:16px 18px; margin:16px 0;
+  }
+  .example-box .label{
+    font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:var(--green);
+    text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px; display:block;
+  }
+
+  .diagram{
+    background:#fff; border:2px solid var(--ink); border-radius:8px;
+    padding:20px; margin:18px 0; text-align:center;
+  }
+  .diagram svg{max-width:100%; height:auto;}
+  .diagram .caption{font-size:0.85rem; color:var(--pencil); margin-top:10px; font-style:italic;}
+
+  .exam-tag{
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--green-soft); color:var(--green);
+    font-family:'JetBrains Mono', monospace; font-size:0.72rem;
+    padding:3px 10px; border-radius:20px; margin-bottom:10px;
+    font-weight:500;
+  }
+  .exam-tag::before{content:"★";}
+
+  ul.simple-list{padding-left:22px; margin:10px 0;}
+  ul.simple-list li{margin-bottom:6px;}
+
+  .qbox{
+    border:2px solid var(--ink); border-radius:8px; padding:18px 20px; margin:16px 0;
+    background:#fff;
+  }
+  .qbox .qhead{
+    font-weight:600; margin-bottom:8px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  }
+  .qbox .qhead .marks{
+    font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:var(--red-pen); white-space:nowrap;
+  }
+
+  .locked-cta{
+    margin-top:56px; padding:28px 26px; border:2px solid var(--ink); border-radius:10px;
+    background:var(--ink); color:#fff; text-align:center;
+    box-shadow:6px 6px 0 var(--card-shadow);
+  }
+  .locked-cta h3{font-family:'Caveat', cursive; font-size:2rem; margin:0 0 8px;}
+  .locked-cta p{color:#DCE3F0; margin:0 0 18px;}
+  .btn-primary{
+    display:inline-block; background:var(--red-pen); color:#fff; font-weight:600;
+    padding:12px 26px; border-radius:6px; text-decoration:none; border:2px solid var(--red-pen);
+  }
+
+  footer{
+    border-top:2px solid var(--ink); padding:24px 0 0; margin-top:40px;
+    color:var(--pencil); font-size:0.85rem;
+  }
+
+  @media (max-width:640px){
+    h1.title{font-size:2.2rem;}
+    .lesson-head{padding-top:20px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="site">
+    <a class="brand" href="index.html"><span class="dot"></span>ChalkTalk</a>
+    <div style="display:flex; gap:16px; align-items:center;">
+      <a class="back" href="about.html">About</a>
+      <a class="back" href="index.html">← All subjects</a>
+    </div>
+  </header>
+
+  <div class="lesson-head">
+    <span class="eyebrow">Advanced DSA · Unit 1</span>
+    <h1 class="title">Why Does This Code Take So Long?</h1>
+    <p class="meta">Algorithm complexity &amp; hashing — free lesson · takes about 9 minutes to read</p>
+  </div>
+
+  <h2 class="topic"><span class="topic-num">1.</span>Why do we even talk about "complexity"?</h2>
+
+  <div class="eli5">
+    <p>Imagine you're looking for your best friend's phone number. If it's the very first contact pinned at the top, you find it instantly — no matter how many thousand contacts you have. That's fast, always.</p>
+    <p>Now imagine your contacts aren't sorted at all, and you have to scroll past every single name until you spot theirs. If you have 50 contacts, that's mildly annoying. If you have 50,000, that's a real wait — and it keeps getting worse as your contact list grows.</p>
+    <p><strong>Complexity analysis is just a way of describing "how much worse does this get as the input grows."</strong> Some approaches barely slow down. Others get dramatically slower. That's what Big-O notation measures.</p>
+  </div>
+
+  <h2 class="topic"><span class="topic-num">2.</span>Asymptotic Notations (the growth-rate labels)</h2>
+
+  <div class="exam-tag">Very high — asked almost every semester</div>
+
+  <div class="now-formal">
+    <span class="label">Now in exam language — the common growth rates:</span>
+    <ul class="simple-list">
+      <li><strong>O(1) — Constant:</strong> same time regardless of input size (pinned contact).</li>
+      <li><strong>O(log n) — Logarithmic:</strong> time grows very slowly as input grows (looking up a word in a dictionary — you skip half the remaining pages each guess).</li>
+      <li><strong>O(n) — Linear:</strong> time grows directly with input size (scrolling through an unsorted contact list).</li>
+      <li><strong>O(n²) — Quadratic:</strong> time grows much faster — checking every pair of students against each other for matching answers.</li>
+    </ul>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg">
+      <line x1="40" y1="220" x2="460" y2="220" stroke="#1D3557" stroke-width="2"/>
+      <line x1="40" y1="220" x2="40" y2="20" stroke="#1D3557" stroke-width="2"/>
+      <text x="450" y="238" font-family="JetBrains Mono" font-size="11" fill="#7A7368">input size (n)</text>
+      <text x="8" y="25" font-family="JetBrains Mono" font-size="11" fill="#7A7368">time</text>
+
+      <!-- O(1) flat line -->
+      <path d="M50 200 L450 200" stroke="#2C7A4B" stroke-width="3" fill="none"/>
+      <text x="380" y="195" font-family="Lexend" font-size="12" fill="#2C7A4B" font-weight="600">O(1)</text>
+
+      <!-- O(log n) -->
+      <path d="M50 210 Q 150 150, 450 110" stroke="#4A5A78" stroke-width="3" fill="none"/>
+      <text x="380" y="115" font-family="Lexend" font-size="12" fill="#4A5A78" font-weight="600">O(log n)</text>
+
+      <!-- O(n) linear -->
+      <path d="M50 210 L450 45" stroke="#B23A2F" stroke-width="3" fill="none"/>
+      <text x="380" y="60" font-family="Lexend" font-size="12" fill="#B23A2F" font-weight="600">O(n)</text>
+
+      <!-- O(n^2) quadratic -->
+      <path d="M50 210 Q 250 200, 320 90 T 400 20" stroke="#F4D35E" stroke-width="4" fill="none"/>
+      <text x="270" y="45" font-family="Lexend" font-size="12" fill="#a68515" font-weight="600">O(n²)</text>
+    </svg>
+    <div class="caption">Draw a rough version of this in your exam when asked to compare growth rates — examiners look for the shape, not exact math.</div>
+  </div>
+
+  <h2 class="topic"><span class="topic-num">3.</span>Hashing — jumping straight to the answer</h2>
+
+  <div class="eli5">
+    <p>Imagine a library with a million books, but instead of searching shelf by shelf, every book's title gets fed into a formula that instantly spits out "Shelf number 482." You walk straight there — no searching at all.</p>
+    <p>That formula is a <strong>hash function</strong>, and the shelf numbers are a <strong>hash table</strong>. Instead of scanning through data one item at a time, hashing converts a key directly into the exact location where it lives.</p>
+  </div>
+
+  <div class="now-formal">
+    <span class="label">Now in exam language:</span>
+    <p><strong>Hashing</strong> is a technique that converts a key into an array index using a <strong>hash function</strong>, allowing near-instant (average O(1)) insertion and lookup — instead of scanning through every element like a plain list would.</p>
+  </div>
+
+  <div class="example-box">
+    <span class="label">Real example</span>
+    <p>Your phone's contact search bar doesn't scroll through every name when you type — it uses hashing internally to jump close to the matching entries almost instantly, even with thousands of contacts.</p>
+  </div>
+
+  <h2 class="topic"><span class="topic-num">4.</span>Collisions — when two keys land on the same shelf</h2>
+
+  <div class="eli5">
+    <p>Sometimes two completely different book titles both hash to "Shelf 482." That's a <strong>collision</strong> — two keys landing in the same spot. There are two common ways to handle it:</p>
+    <p><strong>Chaining:</strong> just let both books sit on the same shelf, one behind the other, like a small stack. When you arrive at Shelf 482, you check the short stack to find the exact one you want.</p>
+    <p><strong>Open addressing (linear probing):</strong> if Shelf 482 is full, the librarian has a rule — "if taken, try the next shelf, then the next" — until an empty spot is found.</p>
+  </div>
+
+  <div class="now-formal">
+    <span class="label">Now in exam language — collision resolution techniques:</span>
+    <ul class="simple-list">
+      <li><strong>Separate Chaining:</strong> each hash table slot holds a linked list of all elements that hashed to it.</li>
+      <li><strong>Linear Probing:</strong> on collision, search sequentially for the next empty slot.</li>
+      <li><strong>Quadratic Probing / Double Hashing:</strong> variations that jump around more cleverly to reduce clustering.</li>
+    </ul>
+  </div>
+
+  <h2 class="topic"><span class="topic-num">5.</span>Practice Question (try it yourself)</h2>
+
+  <div class="qbox">
+    <div class="qhead">
+      <span>Explain any two collision resolution techniques in hashing with a suitable example.</span>
+      <span class="marks">10 marks</span>
+    </div>
+    <p style="color:var(--ink-soft); margin:0;">Tip: draw a small hash table (5-6 slots), show two keys landing on the same slot, then show how chaining vs. linear probing each resolve it differently — visual answers score higher than definitions alone.</p>
+  </div>
+
+  <div class="locked-cta">
+    <h3>Like this? Unit 1 continues...</h3>
+    <p>Space-time tradeoffs, dynamic hashing, and 4 more practice questions — plus all 5 units covering AVL trees, greedy algorithms, dynamic programming, and backtracking, all explained the same simple-first way.</p>
+    <a class="btn-primary" href="dsa-full.html">Unlock Full Advanced DSA Notes — ₹99</a>
+  </div>
+
+  <footer>
+    <span>ChalkTalk · Unit 1 free forever</span>
+  </footer>
+
+</div>
+<script>
+  (function(){
+    const alreadyUnlocked = localStorage.getItem('chalktalk_dsa_unlocked') === 'true';
+    if(alreadyUnlocked){
+      const cta = document.querySelector('.locked-cta');
+      if(cta){
+        cta.innerHTML = `
+          <h3>You've already unlocked this!</h3>
+          <p>Units 2 to 5 are waiting for you — AVL trees, greedy algorithms, dynamic programming, backtracking.</p>
+          <a class="btn-primary" href="dsa-full.html">Continue to Units 2–5 →</a>
+        `;
+      }
+    }
+  })();
+</script>
+<script src="chat-widget.js"></script>
+</body>
+</html>
