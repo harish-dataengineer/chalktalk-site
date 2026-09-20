@@ -88,6 +88,16 @@
     text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px; display:block;
   }
 
+  .code-block{
+    background:#1D3557; color:#E8EEF7; border-radius:8px; padding:16px 18px;
+    margin:14px 0; font-family:'JetBrains Mono', monospace; font-size:0.85rem;
+    line-height:1.6; overflow-x:auto; white-space:pre;
+  }
+  .code-block .kw{color:#F4D35E;}
+  .code-block .cls{color:#8FCB9B;}
+  .code-block .str{color:#E8B5AE;}
+  .code-block .cmt{color:#7A8FB5; font-style:italic;}
+
   .diagram{
     background:#fff; border:2px solid var(--ink); border-radius:8px;
     padding:20px; margin:18px 0; text-align:center;
@@ -220,8 +230,15 @@
   </div>
 
   <div class="example-box">
-    <span class="label">Real example</span>
-    <p>This is why a .jar file built on your Windows laptop runs perfectly on your friend's Mac without any changes — the bytecode inside is identical, only the JVM interpreting it differs per machine.</p>
+    <span class="label">Real example — the actual code</span>
+    <p>Here's the simplest Java program that shows this pipeline in action:</p>
+    <div class="code-block"><span class="cmt">// Save this as HelloWorld.java</span>
+<span class="kw">public class</span> <span class="cls">HelloWorld</span> {
+    <span class="kw">public static void</span> main(String[] args) {
+        System.out.println(<span class="str">"Hello, World!"</span>);
+    }
+}</div>
+    <p>Run <code>javac HelloWorld.java</code> — this creates <code>HelloWorld.class</code> (the bytecode). Then run <code>java HelloWorld</code> — this is the JVM loading and executing that bytecode, printing your message.</p>
   </div>
 
   <h2 class="topic"><span class="topic-num">3.</span>Key Features of Java (short-note favorite)</h2>
