@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OOP through C++ Unit 1 Important Questions — Explained Simply | PlainSlate</title>
+<meta name="description" content="OOP through C++ Unit 1 explained simply — C vs C++, OOP concepts, scope resolution, and namespaces, with important exam questions. Free lesson.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@600;700&family=Lexend:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #FAF7EF; --paper-line: #C7D3E8; --ink: #1D3557; --ink-soft: #4A5A78;
+    --pencil: #7A7368; --red-pen: #B23A2F; --red-pen-soft: #E8B5AE;
+    --highlight: #F4D35E; --highlight-soft: #FBEAB0; --green: #2C7A4B; --green-soft: #D9EEE0;
+    --card-shadow: rgba(29,53,87,0.08);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--paper);
+    background-image:repeating-linear-gradient(to bottom, transparent 0px, transparent 37px, var(--paper-line) 38px);
+    background-attachment:local; color:var(--ink); font-family:'Lexend', sans-serif; line-height:1.65;
+  }
+  a{color:var(--red-pen);}
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px 80px;}
+
+  header.site{
+    padding:24px 0 16px; border-bottom:2px solid var(--ink);
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
+  }
+  .brand{font-family:'Patrick Hand', cursive; font-size:1.4rem; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:8px;}
+  .brand .dot{width:10px; height:10px; border-radius:50%; background:var(--red-pen); display:inline-block;}
+  .back{font-size:0.9rem; color:var(--ink-soft); text-decoration:none;}
+  .back:hover{color:var(--red-pen);}
+
+  .lesson-head{padding:34px 0 10px;}
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:0.75rem; letter-spacing:0.05em;
+    text-transform:uppercase; color:var(--red-pen); background:var(--highlight-soft);
+    padding:4px 10px; border-radius:3px; display:inline-block; transform:rotate(-1deg);
+  }
+  h1.title{
+    font-family:'Caveat', cursive; font-weight:700; font-size:3rem; margin:14px 0 6px; line-height:1.1;
+  }
+  .meta{color:var(--pencil); font-size:0.9rem; margin-bottom:20px;}
+
+  h2.topic{
+    font-family:'Lexend'; font-weight:700; font-size:1.5rem; margin:46px 0 6px;
+    padding-top:16px; border-top:2px dashed var(--paper-line);
+  }
+  h2.topic:first-of-type{border-top:none; padding-top:0; margin-top:24px;}
+  .topic-num{color:var(--red-pen); font-family:'JetBrains Mono'; font-size:0.9rem; margin-right:6px;}
+
+  .eli5{
+    background:var(--highlight-soft);
+    border:2px solid var(--ink);
+    border-radius:8px;
+    padding:18px 20px;
+    margin:14px 0 18px;
+    position:relative;
+    box-shadow:4px 4px 0 var(--card-shadow);
+  }
+  .eli5::before{
+    content:"Explain like I'm 10";
+    position:absolute; top:-13px; left:16px;
+    background:var(--red-pen); color:#fff;
+    font-family:'Patrick Hand', cursive; font-size:1rem;
+    padding:2px 12px; border-radius:4px;
+    transform:rotate(-2deg);
+  }
+  .eli5 p{margin:6px 0 0;}
+  .eli5 p:first-child{margin-top:0;}
+  .eli5-art{width:100%; max-width:100%; height:auto; margin-top:14px; display:block;}
+
+  .now-formal{margin:18px 0;}
+  .now-formal .label{
+    font-family:'Patrick Hand', cursive; color:var(--ink-soft); font-size:1.05rem; margin-bottom:6px; display:block;
+  }
+  .now-formal p{margin:0 0 10px;}
+
+  .example-box{
+    background:#fff; border:2px solid var(--paper-line); border-radius:8px;
+    padding:16px 18px; margin:16px 0;
+  }
+  .example-box .label{
+    font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:var(--green);
+    text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px; display:block;
+  }
+
+  .code-block{
+    background:#1D3557; color:#E8EEF7; border-radius:8px; padding:16px 18px;
+    margin:14px 0; font-family:'JetBrains Mono', monospace; font-size:0.85rem;
+    line-height:1.6; overflow-x:auto; white-space:pre;
+  }
+  .code-block .kw{color:#F4D35E;}
+  .code-block .cls{color:#8FCB9B;}
+  .code-block .str{color:#E8B5AE;}
+  .code-block .cmt{color:#7A8FB5; font-style:italic;}
+
+  .diagram{
+    background:#fff; border:2px solid var(--ink); border-radius:8px;
+    padding:20px; margin:18px 0; text-align:center;
+  }
+  .diagram svg{max-width:100%; height:auto;}
+  .diagram .caption{font-size:0.85rem; color:var(--pencil); margin-top:10px; font-style:italic;}
+
+  .exam-tag{
+    display:inline-flex; align-items:center; gap:6px;
+    background:var(--green-soft); color:var(--green);
+    font-family:'JetBrains Mono', monospace; font-size:0.72rem;
+    padding:3px 10px; border-radius:20px; margin-bottom:10px;
+    font-weight:500;
+  }
+  .exam-tag::before{content:"★";}
+
+  ul.simple-list{padding-left:22px; margin:10px 0;}
+  ul.simple-list li{margin-bottom:6px;}
+
+  .qbox{
+    border:2px solid var(--ink); border-radius:8px; padding:18px 20px; margin:16px 0;
+    background:#fff;
+  }
+  .qbox .qhead{
+    font-weight:600; margin-bottom:8px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  }
+  .qbox .qhead .marks{
+    font-family:'JetBrains Mono', monospace; font-size:0.72rem; color:var(--red-pen); white-space:nowrap;
+  }
+
+  .locked-cta{
+    margin-top:56px; padding:28px 26px; border:2px solid var(--ink); border-radius:10px;
+    background:var(--ink); color:#fff; text-align:center;
+    box-shadow:6px 6px 0 var(--card-shadow);
+  }
+  .locked-cta h3{font-family:'Caveat', cursive; font-size:2rem; margin:0 0 8px;}
+  .locked-cta p{color:#DCE3F0; margin:0 0 18px;}
+  .btn-primary{
+    display:inline-block; background:var(--red-pen); color:#fff; font-weight:600;
+    padding:12px 26px; border-radius:6px; text-decoration:none; border:2px solid var(--red-pen);
+  }
+
+  footer{
+    border-top:2px solid var(--ink); padding:24px 0 0; margin-top:40px;
+    color:var(--pencil); font-size:0.85rem;
+  }
+
+  @media (max-width:640px){
+    h1.title{font-size:2.2rem;}
+    .lesson-head{padding-top:20px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="site">
+    <a class="brand" href="index.html"><span class="dot"></span>PlainSlate</a>
+    <div style="display:flex; gap:16px; align-items:center;">
+      <a class="back" href="about.html">About</a>
+      <a class="back" href="index.html">← All subjects</a>
+    </div>
+  </header>
+
+  <div class="lesson-head">
+    <span class="eyebrow">OOP through C++ · Unit 1</span>
+    <h1 class="title">Why Did Programming Need "Objects"?</h1>
+    <p class="meta">Introduction to C++ &amp; OOP Concepts — free lesson · takes about 8 minutes to read</p>
+  </div>
+
+  <h2 class="topic"><span class="topic-num">1.</span>Why wasn't plain C enough?</h2>
+
+  <div class="eli5">
+    <p>Imagine running a restaurant kitchen where every recipe, every ingredient, and every utensil is scattered loosely across one giant counter — nothing is grouped together. That's roughly how C organizes a program: functions and data sit separately, and nothing stops any function from messing with any data.</p>
+    <p>Now imagine that same kitchen reorganized into stations — a "salad station" that owns its own ingredients and tools, a "grill station" that owns its own. Each station bundles its data and the tools that work on that data together, and outsiders can't just reach in and grab things carelessly. That's the core idea C++ added: <strong>Object-Oriented Programming (OOP)</strong>.</p>
+  </div>
+
+  <div class="now-formal">
+    <span class="label">Now in exam language — key differences between C and C++:</span>
+    <ul class="simple-list">
+      <li><strong>C</strong> is procedural — organized around functions acting on data.</li>
+      <li><strong>C++</strong> is Object-Oriented — organized around objects that bundle data and functions together.</li>
+      <li>C++ adds <strong>classes</strong>, <strong>inheritance</strong>, <strong>polymorphism</strong>, and <strong>encapsulation</strong> — none of which exist in C.</li>
+      <li>C++ supports function overloading and default arguments; C does not.</li>
+    </ul>
+  </div>
+
+  <h2 class="topic"><span class="topic-num">2.</span>The Four Pillars of OOP</h2>
+
+  <div class="exam-tag">Very high — asked almost every semester in some form</div>
+
+  <div class="eli5">
+    <p><strong>Encapsulation</strong> is like a medicine capsule — the actual chemicals are hidden inside, and you interact with it through one simple action (swallow it), not by touching the ingredients directly.</p>
+    <p><strong>Abstraction</strong> is like driving a car — you use the steering wheel and pedals without needing to know how the engine internally works.</p>
+    <p><strong>Inheritance</strong> is like a child inheriting features from a parent — a "Car" class can reuse everything from a general "Vehicle" class instead of rebuilding it from scratch.</p>
+    <p><strong>Polymorphism</strong> is like a single "print" button that behaves differently depending on what's connected — same interface, different behavior depending on context.</p>
+  </div>
+
+  <div class="now-formal">
+    <span class="label">Now in exam language:</span>
+    <ul class="simple-list">
+      <li><strong>Encapsulation:</strong> bundling data and methods together, hiding internal details using access specifiers (private/public).</li>
+      <li><strong>Abstraction:</strong> exposing only essential features while hiding implementation complexity.</li>
+      <li><strong>Inheritance:</strong> a class acquiring properties and behavior of another class.</li>
+      <li><strong>Polymorphism:</strong> the same function/operator behaving differently based on context (compile-time or run-time).</li>
+    </ul>
+  </div>
+
+  <h2 class="topic"><span class="topic-num">3.</span>Scope Resolution Operator (::)</h2>
+
+  <div class="eli5">
+    <p>Imagine two friends both named "Ravi" in different WhatsApp groups. To avoid confusion, you'd say "Ravi from College Group" instead of just "Ravi." The <strong>scope resolution operator</strong> does exactly this in code — it specifies exactly which version of a name you mean when there could be ambiguity.</p>
+  </div>
+
+  <div class="now-formal">
+    <span class="label">Now in exam language:</span>
+    <p>The <strong>::</strong> operator is used to define a class's member function outside the class body, and to access a global variable when a local variable shares the same name.</p>
+  </div>
+
+  <div class="code-block"><span class="kw">class</span> <span class="cls">Circle</span> {
+<span class="kw">public</span>:
+    <span class="kw">double</span> radius;
+    <span class="kw">double</span> area(); <span class="cmt">// declared here</span>
+};
+
+<span class="cmt">// defined outside using scope resolution</span>
+<span class="kw">double</span> <span class="cls">Circle</span>::area() {
+    <span class="kw">return</span> 3.14 * radius * radius;
+}</div>
+
+  <h2 class="topic"><span class="topic-num">4.</span>Namespaces — avoiding name clashes</h2>
+
+  <div class="eli5">
+    <p>Namespaces are like separate WhatsApp groups where the same nickname can exist without conflict — "Ravi" in Group A and "Ravi" in Group B are completely different people, and specifying the group removes any confusion.</p>
+  </div>
+
+  <div class="now-formal">
+    <span class="label">Now in exam language:</span>
+    <p>A <strong>namespace</strong> groups related identifiers (classes, functions, variables) under one name to avoid naming conflicts, especially in large programs combining multiple libraries. <code>std</code> is the most common example — that's why you write <code>std::cout</code>, or add <code>using namespace std;</code> to skip the prefix.</p>
+  </div>
+
+  <h2 class="topic"><span class="topic-num">5.</span>Practice Question (try it yourself)</h2>
+
+  <div class="qbox">
+    <div class="qhead">
+      <span>Explain the key concepts of Object-Oriented Programming with suitable examples.</span>
+      <span class="marks">10 marks</span>
+    </div>
+    <p style="color:var(--ink-soft); margin:0;">Tip: cover all four pillars (encapsulation, abstraction, inheritance, polymorphism) with one short example each — examiners check for coverage of all four, not depth on just one.</p>
+  </div>
+
+
+  <div class="locked-cta">
+    <h3>Like this? Unit 1 continues...</h3>
+    <p>Constructors, destructors, operator overloading, inheritance, virtual functions, templates, and the STL — plus all 5 units, worked code examples throughout, all explained the same simple-first way.</p>
+    <a class="btn-primary" href="cpp-full.html">Unlock Full C++ Notes — ₹99</a>
+  </div>
+
+  <footer>
+    <span>PlainSlate · Unit 1 free forever</span>
+  </footer>
+
+</div>
+<script>
+  (function(){
+    const alreadyUnlocked = localStorage.getItem('chalktalk_cpp_unlocked') === 'true';
+    if(alreadyUnlocked){
+      const cta = document.querySelector('.locked-cta');
+      if(cta){
+        cta.innerHTML = `
+          <h3>You've already unlocked this!</h3>
+          <p>Units 2 to 5 are waiting for you — constructors, operator overloading, inheritance, templates, and the STL.</p>
+          <a class="btn-primary" href="cpp-full.html">Continue to Units 2–5 →</a>
+        `;
+      }
+    }
+  })();
+</script>
+<script src="chat-widget.js"></script>
+</body>
+</html>
